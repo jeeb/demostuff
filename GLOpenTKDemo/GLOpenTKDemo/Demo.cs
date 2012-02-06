@@ -16,7 +16,7 @@ namespace GLOpenTKDemo
     {
         /// <summary>Creates a 800x600 window with the specified title.</summary>
         public Demo()
-            : base(1280, 720, GraphicsMode.Default, "Rendering a Fabulous Triangle")
+            : base(1280, 720, GraphicsMode.Default, "Rendering a Fabulous Triangle^WTorus")
         {
             VSync = VSyncMode.On;
         }
@@ -86,8 +86,8 @@ namespace GLOpenTKDemo
             GL.End();
             */
 
-            int numc = 200;
-            int numt = 200;
+            int numc = 400;
+            int numt = 400;
 
             int i, j, k;
             double s, t, x, y, z, twopi;
@@ -105,7 +105,7 @@ namespace GLOpenTKDemo
 
                         x = (1 + .1 * Math.Cos(s * twopi / numc)) * Math.Cos(t * twopi / numt);
                         y = (1 + .1 * Math.Cos(s * twopi / numc)) * Math.Sin(t * twopi / numt);
-                        z = .1 * Math.Sin(s * twopi / numc);
+                        z = .1 * Math.Sin(s * twopi / numc) + 4;
                         GL.Color3(0.2f, 0.9f, 1.0f);
                         GL.Vertex3(x, y, z);
                     }
