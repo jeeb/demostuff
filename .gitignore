@@ -1,0 +1,7 @@
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.aps
+GLOpenTKDemo/GLOpenTKDemo/bin/*
+GLOpenTKDemo/GLOpenTKDemo/obj/*
