@@ -16,7 +16,7 @@ namespace GLOpenTKDemo
     {
         /// <summary>Creates a 800x600 window with the specified title.</summary>
         public Demo()
-            : base(800, 600, GraphicsMode.Default, "Rendering a Fabulous Triangle")
+            : base(1280, 720, GraphicsMode.Default, "Rendering a Fabulous Triangle")
         {
             VSync = VSyncMode.On;
         }
@@ -27,7 +27,7 @@ namespace GLOpenTKDemo
         {
             base.OnLoad(e);
 
-            GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
+            GL.ClearColor(0.33f, 0.2f, 0.5f, 0.25f);
             GL.Enable(EnableCap.DepthTest);
         }
 
@@ -58,6 +58,8 @@ namespace GLOpenTKDemo
 
             if (Keyboard[Key.Escape])
                 Exit();
+            if (Keyboard[Key.Left])
+                Exit();
         }
 
         /// <summary>
@@ -74,6 +76,7 @@ namespace GLOpenTKDemo
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
 
+            /*
             GL.Begin(BeginMode.Triangles);
 
             GL.Color3(1.0f, 1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 4.0f);
@@ -81,6 +84,34 @@ namespace GLOpenTKDemo
             GL.Color3(0.2f, 0.9f, 1.0f); GL.Vertex3(0.0f, 1.0f, 4.0f);
 
             GL.End();
+            */
+
+            int numc = 200;
+            int numt = 200;
+
+            int i, j, k;
+            double s, t, x, y, z, twopi;
+
+            twopi = 2 * Math.PI;
+            for (i = 0; i < numc; i++)
+            {
+                GL.Begin(BeginMode.QuadStrip);
+                for (j = 0; j <= numt; j++)
+                {
+                    for (k = 1; k >= 0; k--)
+                    {
+                        s = (i + k) % numc + 0.5;
+                        t = j % numt;
+
+                        x = (1 + .1 * Math.Cos(s * twopi / numc)) * Math.Cos(t * twopi / numt);
+                        y = (1 + .1 * Math.Cos(s * twopi / numc)) * Math.Sin(t * twopi / numt);
+                        z = .1 * Math.Sin(s * twopi / numc);
+                        GL.Color3(0.2f, 0.9f, 1.0f);
+                        GL.Vertex3(x, y, z);
+                    }
+                }
+                GL.End();
+            }
 
             SwapBuffers();
         }
