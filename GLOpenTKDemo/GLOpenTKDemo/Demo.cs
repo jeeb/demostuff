@@ -15,7 +15,7 @@ namespace GLOpenTKDemo
 {
     class Demo : GameWindow
     {
-        private int VaoId, VboId, ColorBufferId;
+        private int VaoId, VboId, ColorBufferId, VertexShaderId, FragmentShaderId, ProgramId;
         /// <summary>Creates a 800x600 window with the specified title.</summary>
         public Demo()
             : base(1280, 720, GraphicsMode.Default, "Rendering a Fabulous Triangle")
@@ -31,6 +31,23 @@ namespace GLOpenTKDemo
 
             GL.ClearColor(0.33f, 0.2f, 0.5f, 0.25f);
             GL.Enable(EnableCap.DepthTest);
+
+            VertexShaderId = GL.CreateShader(ShaderType.VertexShader);
+            //String vertex = Properties.Resources.simplevertex;
+            //System.Console.WriteLine(vertex);
+            GL.ShaderSource(VertexShaderId, Properties.Resources.simplevertex);
+            GL.CompileShader(VertexShaderId);
+
+            FragmentShaderId = GL.CreateShader(ShaderType.FragmentShader);
+            GL.ShaderSource(FragmentShaderId, Properties.Resources.simplefragment);
+            GL.CompileShader(FragmentShaderId);
+
+            ProgramId = GL.CreateProgram();
+            GL.AttachShader(ProgramId, VertexShaderId);
+            GL.AttachShader(ProgramId, FragmentShaderId);
+            GL.LinkProgram(ProgramId);
+            GL.UseProgram(ProgramId);
+
 
             // Creating a VBO object now, so that ugly GL.Begin() code can fly to space.
             // Besides this needs to be done only once, those loops slowing my opengl lol. Unlimited FPS BOOST!

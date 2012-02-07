@@ -60,17 +60,40 @@ namespace GLOpenTKDemo.Properties {
             }
         }
         
-        internal static byte[] simpleFrag {
+        /// <summary>
+        ///   Looks up a localized string similar to #version 330
+        ///
+        ///in vec4 ex_Color;
+        ///out vec4 out_Color;
+        ///
+        ///void main(void)
+        ///{
+        ///   out_Color = ex_Color;
+        ///}
+        ///.
+        /// </summary>
+        internal static string simplefragment {
             get {
-                object obj = ResourceManager.GetObject("simpleFrag", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("simplefragment", resourceCulture);
             }
         }
         
-        internal static byte[] simpleVert {
+        /// <summary>
+        ///   Looks up a localized string similar to #version 330
+        ///
+        ///layout(location=0) in vec4 in_Position;
+        ///layout(location=1) in vec4 in_Color;
+        ///out vec4 ex_Color;
+        ///
+        ///void main(void)
+        ///{
+        ///   gl_Position = in_Position;
+        ///   ex_Color = in_Color;
+        ///}.
+        /// </summary>
+        internal static string simplevertex {
             get {
-                object obj = ResourceManager.GetObject("simpleVert", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("simplevertex", resourceCulture);
             }
         }
     }
