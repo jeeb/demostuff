@@ -9,11 +9,13 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using OpenTK.Input;
+using System.Diagnostics;
 
 namespace GLOpenTKDemo
 {
     class Demo : GameWindow
     {
+        private int VaoId, VboId, ColorBufferId;
         /// <summary>Creates a 800x600 window with the specified title.</summary>
         public Demo()
             : base(1280, 720, GraphicsMode.Default, "Rendering a Fabulous Triangle")
@@ -29,6 +31,72 @@ namespace GLOpenTKDemo
 
             GL.ClearColor(0.33f, 0.2f, 0.5f, 0.25f);
             GL.Enable(EnableCap.DepthTest);
+
+            // Creating a VBO object now, so that ugly GL.Begin() code can fly to space.
+            // Besides this needs to be done only once, those loops slowing my opengl lol. Unlimited FPS BOOST!
+            // This is still awesome to create torus algorithmically :O! We will be doing more of this.
+            // Koura, where is that genNiceBoat() algorithm .3
+            // Unlimited commenting works.
+            int lol = 0;
+            int numc = 200;
+            int numt = 200;
+
+            int i, j, k;
+            double s, t, x, y, z, twopi;
+            float[] Vertices = new float[numc * numt * 4 * 2 + 1600];
+            float[] Colors = new float[numc * numt * 4 * 2 + 1600];
+
+            twopi = 2 * Math.PI;
+            for (i = 0; i < numc; i++)
+            {
+                //GL.Begin(BeginMode.QuadStrip);
+                for (j = 0; j <= numt; j++)
+                {
+                    for (k = 1; k >= 0; k--)
+                    {
+                        ++lol;
+                        s = (i + k) % numc + 0.5;
+                        t = j % numt;
+
+                        x = (1 + .1 * Math.Cos(s * twopi / numc)) * Math.Cos(t * twopi / numt);
+                        y = (1 + .1 * Math.Cos(s * twopi / numc)) * Math.Sin(t * twopi / numt);
+                        z = .1 * Math.Sin(s * twopi / numc) + 4;
+                        Colors[i * j * 4] = 0.2f;
+                        Colors[i * j * 4 + 1] = 0.9f;
+                        Colors[i * j * 4 + 2] = 1.0f;
+                        Colors[i * j * 4 + 3] = 1.0f;
+                        //GL.Color3(0.2f, 0.9f, 1.0f);
+                        Vertices[i * j * 4] = (float)x;
+                        Vertices[i * j * 4 + 1] = (float)y;
+                        Vertices[i * j * 4 + 2] = (float)z;
+                        Vertices[i * j * 4 + 3] = 1.0f;
+                        //GL.Vertex3(x, y, z);
+                    }
+                }
+                //GL.End();
+            }
+            System.Console.WriteLine("Torus had " + (lol*4) + " vertices. Expected " + (200*200*4) + " vertices, but hunch says " + (200*200*2*4) + " vertices.");
+            System.Console.WriteLine("Initialized these: Vertices.length " + Vertices.Length + ".");
+            ErrorCode ErrorCheckValue = GL.GetError();
+
+            GL.GenVertexArrays(1, out VaoId);
+            GL.BindVertexArray(VaoId);
+
+            GL.GenBuffers(1, out VboId);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VboId);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * sizeof(float)), Vertices, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(0);
+
+            GL.GenBuffers(1, out ColorBufferId);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, ColorBufferId);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Colors.Length * sizeof(float)), Colors, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(1);
+
+            ErrorCheckValue = GL.GetError();
+            if (ErrorCheckValue != ErrorCode.NoError)
+                Trace.WriteLine("Error at Creating VBO: " + ErrorCheckValue);
         }
 
         /// <summary>
@@ -75,7 +143,6 @@ namespace GLOpenTKDemo
             Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
-
             /*
             GL.Begin(BeginMode.Triangles);
 
@@ -86,32 +153,6 @@ namespace GLOpenTKDemo
             GL.End();
             */
 
-            int numc = 200;
-            int numt = 200;
-
-            int i, j, k;
-            double s, t, x, y, z, twopi;
-
-            twopi = 2 * Math.PI;
-            for (i = 0; i < numc; i++)
-            {
-                GL.Begin(BeginMode.QuadStrip);
-                for (j = 0; j <= numt; j++)
-                {
-                    for (k = 1; k >= 0; k--)
-                    {
-                        s = (i + k) % numc + 0.5;
-                        t = j % numt;
-
-                        x = (1 + .1 * Math.Cos(s * twopi / numc)) * Math.Cos(t * twopi / numt);
-                        y = (1 + .1 * Math.Cos(s * twopi / numc)) * Math.Sin(t * twopi / numt);
-                        z = .1 * Math.Sin(s * twopi / numc);
-                        GL.Color3(0.2f, 0.9f, 1.0f);
-                        GL.Vertex3(x, y, z);
-                    }
-                }
-                GL.End();
-            }
 
             SwapBuffers();
         }
