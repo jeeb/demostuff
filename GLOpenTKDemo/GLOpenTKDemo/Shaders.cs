@@ -12,7 +12,8 @@ namespace GLOpenTKDemo
         private string SIMPLEFRAGMENT = "Resources\\shaders\\simple.fragment";
         private string[] ShaderSources;
         /*
-         * Use the already initialized SIMPLEVERTEX or SIMPLEFRAGMENT string objects to load corresponding shader to program memory.
+         * Use the already initialized SIMPLEVERTEX or SIMPLEFRAGMENT (etc) string objects to load corresponding shader to program memory.
+         * Returns empty string if fails.
          */
         private string LoadShaders(string SHADER)
         {
@@ -35,9 +36,9 @@ namespace GLOpenTKDemo
                 Path = Path.Replace("file:\\", "");
             }
             Path += SHADER;
-            System.Console.WriteLine( Path );
+            //System.Console.WriteLine( Path );
 
-            string returnable = "error";
+            string returnable = "";
             System.IO.FileStream stream = new System.IO.FileStream(@Path, System.IO.FileMode.Open);
             // I wonder what will happen if this fails :D
             try
@@ -46,9 +47,9 @@ namespace GLOpenTKDemo
                 System.IO.StreamReader reader = new System.IO.StreamReader(stream);
                 while (reader.EndOfStream != true)
                 {
-                    returnable += reader.ReadLine();
+                    returnable += reader.ReadLine() + "\r\n";
                 }
-                System.Console.WriteLine(returnable);
+                //System.Console.WriteLine(returnable);
             }
             finally
             {
