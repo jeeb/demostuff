@@ -16,6 +16,7 @@ namespace GLOpenTKDemo
     class Demo : GameWindow
     {
         private int VaoId, VboId, ColorBufferId, VertexShaderId, FragmentShaderId, ProgramId;
+        private Shaders shader;
         /// <summary>Creates a 800x600 window with the specified title.</summary>
         public Demo()
             : base(1280, 720, new GraphicsMode(32, 24, 8, 0), "Rendering a Fabulous Triangle^WTorus", GameWindowFlags.Default, DisplayDevice.Default, 3, 3, GraphicsContextFlags.Debug)
@@ -28,27 +29,32 @@ namespace GLOpenTKDemo
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            // Compose a string that consists of three lines.
+            shader = new Shaders();
+            shader.test(); 
+
+
             ErrorCode ErrorCheckValue = GL.GetError();
             GL.ClearColor(0.33f, 0.2f, 0.5f, 0.25f);
             GL.Enable(EnableCap.DepthTest);
-
+            /*
             VertexShaderId = GL.CreateShader(ShaderType.VertexShader);
             //String vertex = Properties.Resources.simplevertex;
             //System.Console.WriteLine(vertex);
-            GL.ShaderSource(VertexShaderId, Properties.Resources.simplevertex);
+            //GL.ShaderSource(VertexShaderId, Properties.Resources.simplevertex);
             GL.CompileShader(VertexShaderId);
 
             FragmentShaderId = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(FragmentShaderId, Properties.Resources.simplefragment);
+            //GL.ShaderSource(FragmentShaderId, Properties.Resources.simplefragment);
             GL.CompileShader(FragmentShaderId);
 
             ProgramId = GL.CreateProgram();
             GL.AttachShader(ProgramId, VertexShaderId);
             GL.AttachShader(ProgramId, FragmentShaderId);
 
-
             GL.LinkProgram(ProgramId);
             GL.UseProgram(ProgramId);
+            */
             ErrorCheckValue = GL.GetError();
             if (ErrorCheckValue != ErrorCode.NoError)
                 Trace.WriteLine("Error at Creating Shaders: " + ErrorCheckValue);
