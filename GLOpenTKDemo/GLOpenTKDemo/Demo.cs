@@ -31,12 +31,12 @@ namespace GLOpenTKDemo
             base.OnLoad(e);
             // Compose a string that consists of three lines.
             shader = new Shaders();
-            shader.test(); 
 
 
             ErrorCode ErrorCheckValue = GL.GetError();
             GL.ClearColor(0.33f, 0.2f, 0.5f, 0.25f);
             GL.Enable(EnableCap.DepthTest);
+            shader.Initialize();
             /*
             VertexShaderId = GL.CreateShader(ShaderType.VertexShader);
             //String vertex = Properties.Resources.simplevertex;
@@ -167,6 +167,8 @@ namespace GLOpenTKDemo
                 Exit();
             if (Keyboard[Key.Left])
                 Exit();
+            if (Keyboard[Key.F5])
+                shader.Update();
         }
 
         /// <summary>
@@ -176,6 +178,7 @@ namespace GLOpenTKDemo
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+            //shader.Update();
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
