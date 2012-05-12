@@ -14,7 +14,7 @@ namespace GLOpenTKDemo
         private string SIMPLEFRAGMENT = "Resources\\shaders\\simple.fragment";
         private string[] ShaderSources;
         private int[] ShaderIds;
-        private int[] ProgramIds;
+        public int[] ProgramIds;
         /*
          * Use the already initialized SIMPLEVERTEX or SIMPLEFRAGMENT (etc) string objects to load corresponding shader to program memory.
          * Returns empty string if fails.

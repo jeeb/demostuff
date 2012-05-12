@@ -15,6 +15,12 @@ namespace GLOpenTKDemo
 {
     class Demo : GameWindow
     {
+        int modelLocation;
+        int viewLocation;
+        int projectionLocation;
+        Matrix4 ModelMatrix = Matrix4.Identity;
+        Matrix4 ViewMatrix = Matrix4.Identity;
+        Matrix4 ProjectionMatrix = Matrix4.Identity;
         private int VaoId, VboId, ColorBufferId;
         private Shaders shader;
         /// <summary>Creates a 800x600 window with the specified title.</summary>
@@ -84,6 +90,7 @@ namespace GLOpenTKDemo
          0.4f, -0.4f, 0.4f, 1.0f,
          0.4f, -0.4f,-0.4f, 1.0f,
         -0.4f, -0.4f,-0.4f, 1.0f
+        
     };
             float[] Colors = {
         1.0f, 0.0f, 0.0f, 1.0f,
@@ -128,16 +135,23 @@ namespace GLOpenTKDemo
         0.2f, 0.0f, 1.0f, 1.0f,
         0.2f, 0.0f, 1.0f, 1.0f
     };
-            
+            modelLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ModelMatrix");
+            viewLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ViewMatrix");
+            projectionLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ProjectionMatrix");
+            Matrix4 heippa = Matrix4.CreateRotationZ(20.0f);
+            Matrix4.Transpose(ref heippa,out ModelMatrix);
+            GL.UniformMatrix4(modelLocation, false, ref ModelMatrix);
+            GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
+            GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
             GL.GenVertexArrays(1, out VaoId);
             GL.BindVertexArray(VaoId);
-
+            //derp cube
             GL.GenBuffers(1, out VboId);
             GL.BindBuffer(BufferTarget.ArrayBuffer, VboId);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * sizeof(float)), Vertices, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(0);
-
+            GL.EnableVertexAttribArray(0);         
+            //our pretty colours
             GL.GenBuffers(1, out ColorBufferId);
             GL.BindBuffer(BufferTarget.ArrayBuffer, ColorBufferId);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Colors.Length * sizeof(float)), Colors, BufferUsageHint.StaticDraw);
@@ -189,11 +203,12 @@ namespace GLOpenTKDemo
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-            //shader.Update();
+            GL.UseProgram(shader.ProgramIds[0]);
+
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
+            Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitY, Vector3.UnitZ);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
             GL.DrawArrays(BeginMode.Triangles, 0, 6*6*4);
@@ -207,7 +222,7 @@ namespace GLOpenTKDemo
             GL.End();
             */
 
-
+            GL.UseProgram(0);
             SwapBuffers();
         }
 
