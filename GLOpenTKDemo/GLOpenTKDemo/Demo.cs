@@ -138,19 +138,14 @@ namespace GLOpenTKDemo
             modelLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ModelMatrix");
             viewLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ViewMatrix");
             projectionLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ProjectionMatrix");
-            Matrix4 heippa = Matrix4.CreateRotationZ(20.0f);
-            Matrix4.Transpose(ref heippa,out ModelMatrix);
-            GL.UniformMatrix4(modelLocation, false, ref ModelMatrix);
-            GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
-            GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
             GL.GenVertexArrays(1, out VaoId);
             GL.BindVertexArray(VaoId);
-            //derp cube
+            //derp cubeg
             GL.GenBuffers(1, out VboId);
             GL.BindBuffer(BufferTarget.ArrayBuffer, VboId);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * sizeof(float)), Vertices, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(0);         
+            GL.EnableVertexAttribArray(0);
             //our pretty colours
             GL.GenBuffers(1, out ColorBufferId);
             GL.BindBuffer(BufferTarget.ArrayBuffer, ColorBufferId);
@@ -194,6 +189,42 @@ namespace GLOpenTKDemo
                 Exit();
             if (Keyboard[Key.F5])
                 shader.Update();
+            if (Keyboard[Key.H])//left
+            {
+                Matrix4 heippa = ModelMatrix;
+                Matrix4 heippa2 = Matrix4.CreateRotationY(0.2f);
+                Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            }
+            if (Keyboard[Key.L]) //right
+            {
+                Matrix4 heippa = ModelMatrix;
+                Matrix4 heippa2 = Matrix4.CreateRotationY(-0.2f);
+                Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            }
+            if (Keyboard[Key.J]) //up
+            {
+                Matrix4 heippa = ModelMatrix;
+                Matrix4 heippa2 = Matrix4.CreateRotationX(0.2f);
+                Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            }
+            if (Keyboard[Key.K]) //down
+            {
+                Matrix4 heippa = ModelMatrix;
+                Matrix4 heippa2 = Matrix4.CreateRotationX(-0.2f);
+                Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            }
+            if (Keyboard[Key.U]) //down
+            {
+                Matrix4 heippa = ModelMatrix;
+                Matrix4 heippa2 = Matrix4.CreateRotationZ(0.2f);
+                Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            }
+            if (Keyboard[Key.I]) //down
+            {
+                Matrix4 heippa = ModelMatrix;
+                Matrix4 heippa2 = Matrix4.CreateRotationZ(-0.2f);
+                Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            }
         }
 
         /// <summary>
@@ -211,7 +242,10 @@ namespace GLOpenTKDemo
             Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitY, Vector3.UnitZ);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
-            GL.DrawArrays(BeginMode.Triangles, 0, 6*6*4);
+            GL.UniformMatrix4(modelLocation, false, ref ModelMatrix);
+            GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
+            GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
+            GL.DrawArrays(BeginMode.Triangles, 0, 6 * 6 * 4);
             /*
             GL.Begin(BeginMode.Triangles);
 
