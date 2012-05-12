@@ -18,6 +18,9 @@ namespace GLOpenTKDemo
         int modelLocation;
         int viewLocation;
         int projectionLocation;
+        int timeLocation;
+        int resoLocation;
+        Vector2 resolution;
         Matrix4 ModelMatrix = Matrix4.Identity;
         Matrix4 ViewMatrix = Matrix4.Identity;
         Matrix4 ProjectionMatrix = Matrix4.Identity;
@@ -25,7 +28,7 @@ namespace GLOpenTKDemo
         private Shaders shader;
         /// <summary>Creates a 800x600 window with the specified title.</summary>
         public Demo()
-            : base(1280, 720, new GraphicsMode(32, 24, 8, 0), "Rendering a Fabulous Triangle^WTorus", GameWindowFlags.Default, DisplayDevice.Default, 3, 3, GraphicsContextFlags.Debug)
+            : base(1280, 720, new GraphicsMode(32, 24, 8, 0), "The Demo Effect", GameWindowFlags.Default, DisplayDevice.Default, 3, 3, GraphicsContextFlags.Debug)
         {
             VSync = VSyncMode.On;
         }
@@ -138,6 +141,11 @@ namespace GLOpenTKDemo
             modelLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ModelMatrix");
             viewLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ViewMatrix");
             projectionLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ProjectionMatrix");
+            timeLocation = GL.GetUniformLocation(shader.ProgramIds[0], "time");
+            resoLocation = GL.GetUniformLocation(shader.ProgramIds[0], "resolution");
+
+            resolution = new Vector2(1280, 720);
+
             GL.GenVertexArrays(1, out VaoId);
             GL.BindVertexArray(VaoId);
             //derp cubeg
@@ -235,16 +243,19 @@ namespace GLOpenTKDemo
         {
             base.OnRenderFrame(e);
             GL.UseProgram(shader.ProgramIds[0]);
-
+            float time = System.DateTime.Now.Millisecond * 0.01f;
+            GL.Uniform1(timeLocation, 1, ref time);
+            GL.Uniform2(resoLocation, ref resolution);
+            GL.UniformMatrix4(modelLocation, false, ref ModelMatrix);
+            GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
+            GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitY, Vector3.UnitZ);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
-            GL.UniformMatrix4(modelLocation, false, ref ModelMatrix);
-            GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
-            GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
+            //System.Console.WriteLine(time);
             GL.DrawArrays(BeginMode.Triangles, 0, 6 * 6 * 4);
             /*
             GL.Begin(BeginMode.Triangles);
