@@ -62,14 +62,10 @@ namespace GLOpenTKDemo
             resoLocation = GL.GetUniformLocation(shader.ProgramIds[0], "resolution");
 
             resolution = new Vector2(1280, 720);
-            objects[0] = new VBOCube(0, 0, 0, 1);
-            objects[0].loadToGpu();
-            GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(1); 
+            addCube(0,     0, 0, 0.5f);
+            addCube(0.5f,  0.5f, 0, 0.5f);
+            addCube(0, -0.5f, 0, 0.5f);
             ErrorCheckValue = GL.GetError();
-            count = 1;
             if (ErrorCheckValue != ErrorCode.NoError)
                 Trace.WriteLine("Error at Creating VBO: " + ErrorCheckValue);
 
@@ -97,6 +93,8 @@ namespace GLOpenTKDemo
             GL.Uniform2(resoLocation, ref resolution);
             GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
             GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1); 
             for (int i = 0; i < count; i++)
             {
                 ModelMatrix = objects[i].getModelMatrix();
@@ -107,9 +105,9 @@ namespace GLOpenTKDemo
             GL.UseProgram(0);
         }
 
-        public void addCube(float x, float y, float z)
+        public void addCube(float x, float y, float z, float scale)
         {
-            objects[count] = new VBOCube(x, y, z, 1);
+            objects[count] = new VBOCube(x, y, z, scale);
             objects[count].loadToGpu();
             count++;
 

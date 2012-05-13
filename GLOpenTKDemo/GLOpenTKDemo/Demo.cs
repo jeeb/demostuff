@@ -142,7 +142,7 @@ namespace GLOpenTKDemo
             }
             if (Keyboard[Key.Q])
             {
-                graphics.addCube(0.2f, 0, 0);
+                graphics.addCube(0.7f, 0, 8,0.5f);
             }
 
         }
