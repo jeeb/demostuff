@@ -20,10 +20,10 @@ namespace GLOpenTKDemo
         int projectionLocation;
         int timeLocation;
         int resoLocation;
-        Vector2 resolution;
-        Matrix4 ModelMatrix = Matrix4.Identity;
-        Matrix4 ViewMatrix = Matrix4.Identity;
-        Matrix4 ProjectionMatrix = Matrix4.Identity;
+        Vector2 resolution; 
+        Matrix4 ModelMatrix;
+        Matrix4 ViewMatrix;
+        Matrix4 ProjectionMatrix;
         private int VaoId, VboId, ColorBufferId;
         private Shaders shader;
         /// <summary>Creates a 800x600 window with the specified title.</summary>
@@ -45,6 +45,15 @@ namespace GLOpenTKDemo
             ErrorCode ErrorCheckValue = GL.GetError();
             GL.ClearColor(0.33f, 0.2f, 0.5f, 0.25f);
             GL.Enable(EnableCap.DepthTest);
+            ModelMatrix = Matrix4.Identity;
+            ViewMatrix = Matrix4.Identity;
+            ProjectionMatrix = Matrix4.Identity;
+            GL.Enable(EnableCap.DepthTest);
+            GL.DepthFunc(DepthFunction.Less);
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
+            GL.FrontFace(FrontFaceDirection.Ccw);
+
             shader.Initialize();
             ErrorCheckValue = GL.GetError();
             if (ErrorCheckValue != ErrorCode.NoError)
@@ -52,92 +61,38 @@ namespace GLOpenTKDemo
 
             // Creating a VBO object now, so that ugly GL.Begin() code can fly to space.
             float[] Vertices = {
-        -0.4f, -0.4f, 0.4f, 1.0f,
-        -0.4f,  0.4f, 0.4f, 1.0f,
-         0.4f,  0.4f, 0.4f, 1.0f,
-         0.4f,  0.4f, 0.4f, 1.0f,
-         0.4f, -0.4f, 0.4f, 1.0f,
-        -0.4f, -0.4f, 0.4f, 1.0f,
+           -.5f, -.5f,  .5f, 1 , 
+           -.5f,  .5f,  .5f, 1,
+            .5f,  .5f,  .5f, 1 , 
+            .5f, -.5f,  .5f, 1 , 
+           -.5f, -.5f, -.5f, 1 , 
+           -.5f,  .5f, -.5f, 1 ,
+            .5f,  .5f, -.5f, 1 , 
+            .5f, -.5f, -.5f, 1 , 
 
-        -0.4f, -0.4f, -0.4f, 1.0f,
-        -0.4f,  0.4f, -0.4f, 1.0f,
-         0.4f,  0.4f, -0.4f, 1.0f,
-         0.4f,  0.4f, -0.4f, 1.0f,
-         0.4f, -0.4f, -0.4f, 1.0f,
-        -0.4f, -0.4f, -0.4f, 1.0f,
 
-         -0.4f,-0.4f, -0.4f, 1.0f,
-         -0.4f,-0.4f,  0.4f, 1.0f,
-         -0.4f, 0.4f,  0.4f, 1.0f,
-         -0.4f, 0.4f,  0.4f, 1.0f,
-         -0.4f, 0.4f, -0.4f, 1.0f,
-         -0.4f,-0.4f, -0.4f, 1.0f,
+          };
 
-         0.4f,-0.4f, -0.4f, 1.0f,
-         0.4f,-0.4f,  0.4f, 1.0f,
-         0.4f, 0.4f,  0.4f, 1.0f,
-         0.4f, 0.4f,  0.4f, 1.0f,
-         0.4f, 0.4f, -0.4f, 1.0f,
-         0.4f,-0.4f, -0.4f, 1.0f,
-
-        -0.4f, 0.4f,-0.4f, 1.0f,
-        -0.4f, 0.4f, 0.4f, 1.0f,
-         0.4f, 0.4f, 0.4f, 1.0f,
-         0.4f, 0.4f, 0.4f, 1.0f,
-         0.4f, 0.4f,-0.4f, 1.0f,
-        -0.4f, 0.4f,-0.4f, 1.0f,
-
-        -0.4f, -0.4f,-0.4f, 1.0f,
-        -0.4f, -0.4f, 0.4f, 1.0f,
-         0.4f, -0.4f, 0.4f, 1.0f,
-         0.4f, -0.4f, 0.4f, 1.0f,
-         0.4f, -0.4f,-0.4f, 1.0f,
-        -0.4f, -0.4f,-0.4f, 1.0f
-        
+        float[] Colors = {
+         0, 0, 1, 1 ,
+         1, 0, 0, 1,
+         0, 1, 0, 1,
+         1, 1, 0, 1 ,
+         1, 1, 1, 1,
+         1, 0, 0, 1,
+         1, 0, 1, 1,
+         0, 0, 1, 1
     };
-            float[] Colors = {
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
 
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,  
+            uint[] indices = {
+            0,2,1, 0,3,2,
+            4,3,0, 4,7,3,
+            4,1,5, 4,0,1,
+            3,6,2, 3,7,6,
+            1,6,5, 1,2,6,
+            7,5,6, 7,4,5
+        };
 
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,
-        0.0f, 1.0f, 0.2f, 1.0f,  
-
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f,
-        0.2f, 0.0f, 1.0f, 1.0f
-    };
             modelLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ModelMatrix");
             viewLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ViewMatrix");
             projectionLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ProjectionMatrix");
@@ -156,8 +111,8 @@ namespace GLOpenTKDemo
             GL.EnableVertexAttribArray(0);
             //our pretty colours
             GL.GenBuffers(1, out ColorBufferId);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, ColorBufferId);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Colors.Length * sizeof(float)), Colors, BufferUsageHint.StaticDraw);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ColorBufferId);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(float)), indices, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(1);
 
@@ -181,6 +136,7 @@ namespace GLOpenTKDemo
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projection);
+
         }
 
         /// <summary>
@@ -243,6 +199,12 @@ namespace GLOpenTKDemo
         {
             base.OnRenderFrame(e);
             GL.UseProgram(shader.ProgramIds[0]);
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitY, Vector3.UnitZ);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadMatrix(ref modelview);
+            ViewMatrix = modelview;
             float time = System.DateTime.Now.Millisecond * 0.01f;
             GL.Uniform1(timeLocation, 1, ref time);
             GL.Uniform2(resoLocation, ref resolution);
@@ -250,13 +212,11 @@ namespace GLOpenTKDemo
             GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
             GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+           
 
-            Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitY, Vector3.UnitZ);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref modelview);
+
             //System.Console.WriteLine(time);
-            GL.DrawArrays(BeginMode.Triangles, 0, 6 * 6 * 4);
+            GL.DrawElements(BeginMode.Triangles, 36,DrawElementsType.UnsignedInt, 0);
             /*
             GL.Begin(BeginMode.Triangles);
 
