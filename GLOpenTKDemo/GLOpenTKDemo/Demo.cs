@@ -64,9 +64,17 @@ namespace GLOpenTKDemo
             if (Keyboard[Key.F5])
                 graphics.shaderUpdate();
             if (Keyboard[Key.F])
-                WindowState = WindowState.Fullscreen;
-            if (Keyboard[Key.W])
-                WindowState = WindowState.Normal;
+            {
+                switch (WindowState)
+                {
+                    case WindowState.Fullscreen:
+                        WindowState = WindowState.Normal;
+                        break;
+                    default:
+                        WindowState = WindowState.Fullscreen;
+                        break;
+                }
+            }
             if (Keyboard[Key.H])//left
             {
                 graphics.rotateObjectByY(0.2f);
