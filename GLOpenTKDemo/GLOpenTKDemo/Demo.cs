@@ -91,8 +91,6 @@ namespace GLOpenTKDemo
             {
                 graphics.rotateObjectByZ(-0.2f);
             }
-
-
             if (Keyboard[Key.Up])//left
             {
                 graphics.moveCameraBy(0.0f, 0.2f, 0.0f);
@@ -117,6 +115,32 @@ namespace GLOpenTKDemo
             {
                 graphics.moveCameraBy(0.0f, 0.0f, -0.2f);
             }
+
+            if (Keyboard[Key.Number4])//left
+            {
+                graphics.rotateCameraByY(0.2f);
+            }
+            if (Keyboard[Key.Number6]) //right
+            {
+                graphics.rotateCameraByY(-0.2f);
+            }
+            if (Keyboard[Key.Number8]) //up
+            {
+                graphics.rotateCameraByX(0.2f);
+            }
+            if (Keyboard[Key.Number2]) //down
+            {
+                graphics.rotateCameraByX(-0.2f);
+            }
+            if (Keyboard[Key.Number7])
+            {
+                graphics.rotateCameraByZ(0.2f);
+            }
+            if (Keyboard[Key.Number9])
+            {
+                graphics.rotateCameraByZ(-0.2f);
+            }
+
         }
 
         /// <summary>
@@ -133,7 +157,7 @@ namespace GLOpenTKDemo
             long now = System.DateTime.Now.Millisecond + (System.DateTime.Now.Second * 1000) + (System.DateTime.Now.Minute * 60000);
             if (now - time > 1000)
             {
-                base.Title = "DemoEffect  Fps: " + fps + " frames per second.";
+                base.Title = "DemoEffect  Fps: " + fps + " frames per second. Average draw time: " + (1000.0 / (double)fps) + " ms";
                 fps = 0;
                 time = now;
             }

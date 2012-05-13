@@ -49,7 +49,7 @@ namespace GLOpenTKDemo
             if (ErrorCheckValue != ErrorCode.NoError)
                 Trace.WriteLine("Error at Creating Shaders: " + ErrorCheckValue);
 
-            // Creating a VBO object now, so that ugly GL.Begin() code can fly to space.
+            // Creating a VBO object now, and after it Indexed vb. In otherwords ElementBuffer
             float[] Vertices = {
            -.5f, -.5f,  .5f, 1 , 
            -.5f,  .5f,  .5f, 1,
@@ -112,8 +112,6 @@ namespace GLOpenTKDemo
 
 
             Matrix4 modelview = Matrix4.CreateTranslation(new Vector3(0, 0, -2));
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref modelview);
             ViewMatrix = modelview;
         }
 
@@ -123,8 +121,6 @@ namespace GLOpenTKDemo
             GL.Viewport(a, b, c, d);
 
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, x / (float)y, 1.0f, 90.0f);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref projection);
             ProjectionMatrix = projection;
         }
 
@@ -140,50 +136,29 @@ namespace GLOpenTKDemo
             GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
             GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
 
-
-
-
-            //System.Console.WriteLine(time);
             GL.DrawElements(BeginMode.Triangles, 36, DrawElementsType.UnsignedInt, 0);
-            /*
-            GL.Begin(BeginMode.Triangles);
-
-            GL.Color3(1.0f, 1.0f, 0.0f); GL.Vertex3(-1.0f, -1.0f, 4.0f);
-            GL.Color3(1.0f, 0.0f, 0.0f); GL.Vertex3(1.0f, -1.0f, 4.0f);
-            GL.Color3(0.2f, 0.9f, 1.0f); GL.Vertex3(0.0f, 1.0f, 4.0f);
-
-            GL.End();
-            */
 
             GL.UseProgram(0);
         }
 
         public void rotateObjectByX(float x)
         {
-            Matrix4 heippa = ModelMatrix;
-            Matrix4 heippa2 = Matrix4.CreateRotationX(x);
-            Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            ModelMatrix = Matrix4.Mult(ModelMatrix, Matrix4.CreateRotationX(x));
         }
 
         public void rotateObjectByY(float y)
         {
-            Matrix4 heippa = ModelMatrix;
-            Matrix4 heippa2 = Matrix4.CreateRotationY(y);
-            Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            ModelMatrix = Matrix4.Mult(ModelMatrix, Matrix4.CreateRotationY(y));
         }
 
         public void rotateObjectByZ(float z)
         {
-            Matrix4 heippa = ModelMatrix;
-            Matrix4 heippa2 = Matrix4.CreateRotationZ(z);
-            Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            ModelMatrix= Matrix4.Mult(ModelMatrix, Matrix4.CreateRotationZ(z));
         }
 
         public void translateObject(float x, float y, float z)
         {
-            Matrix4 heippa = ModelMatrix;
-            Matrix4 heippa2 = Matrix4.CreateTranslation(new Vector3(x, y, z));
-            Matrix4.Mult(ref heippa, ref heippa2, out ModelMatrix);
+            ModelMatrix = Matrix4.Mult(ModelMatrix, Matrix4.CreateTranslation(new Vector3(x, y, z)));
         }
 
         public void shaderUpdate()
@@ -196,8 +171,23 @@ namespace GLOpenTKDemo
             Matrix4 heh = Matrix4.CreateTranslation(new Vector3(x, y, z));
             Matrix4 asd = ViewMatrix;
             ViewMatrix = Matrix4.Mult(asd, heh);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref ViewMatrix);
+        }
+
+        public void rotateCameraByX(float x)
+        {
+            Matrix4 heh = Matrix4.CreateRotationX(x);
+            Matrix4 asd = ViewMatrix;
+            Matrix4.Mult(ref asd, ref heh, out ViewMatrix);
+        }
+        public void rotateCameraByY(float y)
+        {
+            ViewMatrix = Matrix4.Mult(ViewMatrix, Matrix4.CreateRotationY(y));
+        }
+        public void rotateCameraByZ(float z)
+        {
+            Matrix4 heh = Matrix4.CreateRotationZ(z);
+            Matrix4 asd = ViewMatrix;
+            ViewMatrix = Matrix4.Mult(asd, heh);
         }
     }
 }
