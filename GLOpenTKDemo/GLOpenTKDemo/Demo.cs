@@ -92,7 +92,7 @@ namespace GLOpenTKDemo
             1,6,5, 1,2,6,
             7,5,6, 7,4,5
         };
-
+            
             modelLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ModelMatrix");
             viewLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ViewMatrix");
             projectionLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ProjectionMatrix");
@@ -133,9 +133,10 @@ namespace GLOpenTKDemo
 
             GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
 
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width/(float)Height, 1.0f, 90.0f);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projection);
+            ProjectionMatrix = projection;
 
         }
 
@@ -201,7 +202,7 @@ namespace GLOpenTKDemo
             GL.UseProgram(shader.ProgramIds[0]);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitY, Vector3.UnitZ);
+            Matrix4 modelview = Matrix4.CreateTranslation(new Vector3(0, 0, -2));
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelview);
             ViewMatrix = modelview;
