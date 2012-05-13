@@ -21,7 +21,9 @@ namespace GLOpenTKDemo
         Matrix4 ModelMatrix;
         Matrix4 ViewMatrix;
         Matrix4 ProjectionMatrix;
-        private int VaoId, VboId, ColorBufferId;
+        int offset;
+        int count;
+        private VBOCube[] objects;
         private Shaders shader;
 
 
@@ -45,44 +47,14 @@ namespace GLOpenTKDemo
             GL.FrontFace(FrontFaceDirection.Ccw);
 
             shader.Initialize();
+
             ErrorCheckValue = GL.GetError();
             if (ErrorCheckValue != ErrorCode.NoError)
                 Trace.WriteLine("Error at Creating Shaders: " + ErrorCheckValue);
 
             // Creating a VBO object now, and after it Indexed vb. In otherwords ElementBuffer
-            float[] Vertices = {
-           -.5f, -.5f,  .5f, 1 , 
-           -.5f,  .5f,  .5f, 1,
-            .5f,  .5f,  .5f, 1 , 
-            .5f, -.5f,  .5f, 1 , 
-           -.5f, -.5f, -.5f, 1 , 
-           -.5f,  .5f, -.5f, 1 ,
-            .5f,  .5f, -.5f, 1 , 
-            .5f, -.5f, -.5f, 1 , 
 
-
-          };
-
-            float[] Colors = {
-         0, 0, 1, 1 ,
-         1, 0, 0, 1,
-         0, 1, 0, 1,
-         1, 1, 0, 1 ,
-         1, 1, 1, 1,
-         1, 0, 0, 1,
-         1, 0, 1, 1,
-         0, 0, 1, 1
-    };
-
-            uint[] indices = {
-            0,2,1, 0,3,2,
-            4,3,0, 4,7,3,
-            4,1,5, 4,0,1,
-            3,6,2, 3,7,6,
-            1,6,5, 1,2,6,
-            7,5,6, 7,4,5
-        };
-
+            objects = new VBOCube[1000];
             modelLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ModelMatrix");
             viewLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ViewMatrix");
             projectionLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ProjectionMatrix");
@@ -90,23 +62,14 @@ namespace GLOpenTKDemo
             resoLocation = GL.GetUniformLocation(shader.ProgramIds[0], "resolution");
 
             resolution = new Vector2(1280, 720);
-
-            GL.GenVertexArrays(1, out VaoId);
-            GL.BindVertexArray(VaoId);
-            //derp cubeg
-            GL.GenBuffers(1, out VboId);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VboId);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * sizeof(float)), Vertices, BufferUsageHint.StaticDraw);
+            objects[0] = new VBOCube(0, 0, 0, 1);
+            objects[0].loadToGpu();
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(0);
-            //our pretty colours
-            GL.GenBuffers(1, out ColorBufferId);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ColorBufferId);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(float)), indices, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(1);
-
+            GL.EnableVertexAttribArray(1); 
             ErrorCheckValue = GL.GetError();
+            count = 1;
             if (ErrorCheckValue != ErrorCode.NoError)
                 Trace.WriteLine("Error at Creating VBO: " + ErrorCheckValue);
 
@@ -119,7 +82,7 @@ namespace GLOpenTKDemo
         public void onResize(int a, int b, int c, int d, int x, int y)
         {
             GL.Viewport(a, b, c, d);
-
+            resolution = new Vector2(x, y);
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, x / (float)y, 1.0f, 90.0f);
             ProjectionMatrix = projection;
         }
@@ -132,33 +95,50 @@ namespace GLOpenTKDemo
             float time = System.DateTime.Now.Millisecond * 0.01f;
             GL.Uniform1(timeLocation, 1, ref time);
             GL.Uniform2(resoLocation, ref resolution);
-            GL.UniformMatrix4(modelLocation, false, ref ModelMatrix);
             GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
             GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
-
-            GL.DrawElements(BeginMode.Triangles, 36, DrawElementsType.UnsignedInt, 0);
+            for (int i = 0; i < count; i++)
+            {
+                ModelMatrix = objects[i].getModelMatrix();
+                GL.UniformMatrix4(modelLocation, false, ref ModelMatrix);
+                objects[i].draw();
+            }
 
             GL.UseProgram(0);
         }
 
+        public void addCube(float x, float y, float z)
+        {
+            objects[count] = new VBOCube(x, y, z, 1);
+            objects[count].loadToGpu();
+            count++;
+
+
+        }
+
         public void rotateObjectByX(float x)
         {
-            ModelMatrix = Matrix4.Mult(ModelMatrix, Matrix4.CreateRotationX(x));
+            //ModelMatrix = Matrix4.Mult(ModelMatrix, Matrix4.CreateRotationX(x));
+            for (int i = 0; i < count; i++)
+            {
+                objects[i].setModelMatrix(Matrix4.Mult(objects[i].getModelMatrix(), Matrix4.CreateRotationX(x)));
+            }
         }
 
         public void rotateObjectByY(float y)
         {
-            ModelMatrix = Matrix4.Mult(ModelMatrix, Matrix4.CreateRotationY(y));
+            for (int i = 0; i < count; i++)
+            {
+                objects[i].setModelMatrix(Matrix4.Mult(objects[i].getModelMatrix(), Matrix4.CreateRotationY(y)));
+            }
         }
 
         public void rotateObjectByZ(float z)
         {
-            ModelMatrix= Matrix4.Mult(ModelMatrix, Matrix4.CreateRotationZ(z));
-        }
-
-        public void translateObject(float x, float y, float z)
-        {
-            ModelMatrix = Matrix4.Mult(ModelMatrix, Matrix4.CreateTranslation(new Vector3(x, y, z)));
+            for (int i = 0; i < count; i++)
+            {
+                objects[i].setModelMatrix(Matrix4.Mult(objects[i].getModelMatrix(), Matrix4.CreateRotationZ(z)));
+            }
         }
 
         public void shaderUpdate()

@@ -140,6 +140,10 @@ namespace GLOpenTKDemo
             {
                 graphics.rotateCameraByZ(-0.2f);
             }
+            if (Keyboard[Key.Q])
+            {
+                graphics.addCube(0.2f, 0, 0);
+            }
 
         }
 
