@@ -25,10 +25,10 @@ namespace GLOpenTKDemo
         int count;
         private VBOCube[] objects;
         private Shaders shader;
-
+        
 
         public Graphics(){}
-
+      
         public void Initialize()
         {
             shader = new Shaders();
@@ -86,7 +86,6 @@ namespace GLOpenTKDemo
         public void Render()
         {
             GL.UseProgram(shader.ProgramIds[0]);
-
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             float time = System.DateTime.Now.Millisecond * 0.01f;
             GL.Uniform1(timeLocation, 1, ref time);

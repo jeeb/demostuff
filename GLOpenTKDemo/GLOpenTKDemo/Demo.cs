@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Media;
 
 using OpenTK;
 using OpenTK.Graphics;
@@ -11,10 +13,15 @@ using OpenTK.Audio.OpenAL;
 using OpenTK.Input;
 using System.Diagnostics;
 
+
 namespace GLOpenTKDemo
 {
+    
     class Demo : GameWindow
     {
+        SoundPlayer player = new SoundPlayer();
+        string path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+
         int fps;
         long time;
         Graphics graphics;
@@ -33,7 +40,10 @@ namespace GLOpenTKDemo
         {
             base.OnLoad(e);
             graphics = new Graphics();
-            graphics.Initialize();
+            graphics.Initialize(); 
+            player.SoundLocation = path + @"\demostep.wav";
+            player.Load();
+            player.Play();
             // Compose a string that consists of three lines.
 
         }
@@ -161,7 +171,7 @@ namespace GLOpenTKDemo
         /// <param name="e">Contains timing information.</param>
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-    
+            
             base.OnRenderFrame(e);
             graphics.Render();
             SwapBuffers();
