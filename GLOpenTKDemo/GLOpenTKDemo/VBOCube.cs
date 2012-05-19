@@ -87,5 +87,15 @@ namespace GLOpenTKDemo
             ModelMatrix = mat;
         }
 
+        public void drawFirst()
+        {
+            GL.DepthMask(false);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VboId);
+            GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ColorBufferId);
+            GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
+            GL.DrawElements(BeginMode.Triangles, 36, DrawElementsType.UnsignedInt, 0);
+            GL.DepthMask(true);
+        }
     }
 }

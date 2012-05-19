@@ -24,6 +24,7 @@ namespace GLOpenTKDemo
         int offset;
         int count;
         private VBOCube[] objects;
+        private VBOCube background;
         private Shaders shader;
         
 
@@ -35,16 +36,16 @@ namespace GLOpenTKDemo
 
 
             ErrorCode ErrorCheckValue = GL.GetError();
-            GL.ClearColor(0.33f, 0.2f, 0.5f, 0.25f);
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
             ModelMatrix = Matrix4.Identity;
             ViewMatrix = Matrix4.Identity;
             ProjectionMatrix = Matrix4.Identity;
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
-            GL.Enable(EnableCap.CullFace);
-            GL.CullFace(CullFaceMode.Back);
-            GL.FrontFace(FrontFaceDirection.Ccw);
+            //GL.Enable(EnableCap.CullFace);
+           // GL.CullFace(CullFaceMode.Back);
+            //GL.FrontFace(FrontFaceDirection.Ccw);
 
             shader.Initialize();
 
@@ -62,6 +63,8 @@ namespace GLOpenTKDemo
             resoLocation = GL.GetUniformLocation(shader.ProgramIds[0], "resolution");
 
             resolution = new Vector2(1280, 720);
+            background = new VBOCube(0, 0, 0, 20.0f);
+            background.loadToGpu();
             addCube(0,     0, 0, 0.5f);
             addCube(0.5f,  0.5f, 0, 0.5f);
             addCube(0, -0.5f, 0, 0.5f);
@@ -87,6 +90,7 @@ namespace GLOpenTKDemo
         {
             GL.UseProgram(shader.ProgramIds[0]);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            background.drawFirst();
             float time = System.DateTime.Now.Millisecond * 0.01f;
             GL.Uniform1(timeLocation, 1, ref time);
             GL.Uniform2(resoLocation, ref resolution);
