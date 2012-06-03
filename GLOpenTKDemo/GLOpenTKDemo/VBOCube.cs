@@ -13,7 +13,7 @@ namespace GLOpenTKDemo
     class VBOCube
     {
         Matrix4 ModelMatrix,ViewMatrix;
-        private int VaoId, VboId, ColorBufferId;
+        private int VaoId, VboId, ColorBufferId, ShaderProgramId;
         float[] Vertices;
         float[] Colors = {
             0, 0, 1, 1 ,
@@ -34,17 +34,18 @@ namespace GLOpenTKDemo
             7,5,6, 7,4,5
         };
 
-        public VBOCube(float x, float y, float z, float scale)
+        public VBOCube(float x, float y, float z, float scale, int ShaderProgramId)
         {
+            this.ShaderProgramId = ShaderProgramId;
             Vertices = new float[]{
-           -(scale*0.5f), -(scale*0.5f), (scale*0.5f), 1 , 
-           -(scale*0.5f), (scale*0.5f), (scale*0.5f), 1 ,
-           (scale*0.5f), (scale*0.5f), (scale*0.5f), 1 , 
-           (scale*0.5f), -(scale*0.5f), (scale*0.5f), 1 , 
+           -(scale*0.5f), -(scale*0.5f),  (scale*0.5f), 1 , 
+           -(scale*0.5f),  (scale*0.5f),  (scale*0.5f), 1 ,
+            (scale*0.5f),  (scale*0.5f),  (scale*0.5f), 1 , 
+            (scale*0.5f), -(scale*0.5f),  (scale*0.5f), 1 , 
            -(scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
-           -(scale*0.5f), (scale*0.5f), -(scale*0.5f), 1 ,
-           (scale*0.5f), (scale*0.5f), -(scale*0.5f), 1 , 
-           (scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
+           -(scale*0.5f),  (scale*0.5f), -(scale*0.5f), 1 ,
+            (scale*0.5f),  (scale*0.5f), -(scale*0.5f), 1 , 
+            (scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
           };
             ViewMatrix = Matrix4.Identity;
             ModelMatrix = Matrix4.CreateTranslation(new Vector3(x,y,z));
@@ -99,6 +100,11 @@ namespace GLOpenTKDemo
         public Matrix4 getModelViewMatrix()
         {
             return Matrix4.Mult(ViewMatrix, ModelMatrix);
+        }
+
+        public int getShaderProgramId()
+        {
+            return ShaderProgramId;
         }
 
         public void drawFirst()

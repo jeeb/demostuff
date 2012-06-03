@@ -12,9 +12,13 @@ namespace GLOpenTKDemo
 
         private string SIMPLEVERTEX = "Resources\\shaders\\simple.vertex";
         private string SIMPLEFRAGMENT = "Resources\\shaders\\simple.fragment";
+        private string ADVFRAGMENT = "Resources\\shaders\\adv.fragment";
+        private string ADV2FRAGMENT = "Resources\\shaders\\adv2.fragment";
+        private string ADVVertex = "Resources\\shaders\\adv.vertex";
         private string[] ShaderSources;
         private int[] ShaderIds;
         public int[] ProgramIds;
+        private int shaderCount, programCount;
         /*
          * Use the already initialized SIMPLEVERTEX or SIMPLEFRAGMENT (etc) string objects to load corresponding shader to program memory.
          * Returns empty string if fails.
@@ -22,10 +26,11 @@ namespace GLOpenTKDemo
 
         public Shaders()
         {
-            ShaderSources = new string[2];
-            ShaderIds = new int[2];
-            ProgramIds = new int[1];
-
+            shaderCount = 5;
+            programCount = 3;
+            ShaderSources = new string[shaderCount];
+            ShaderIds = new int[shaderCount];
+            ProgramIds = new int[programCount];
         }
 
         private string LoadShaders(string SHADER)
@@ -104,36 +109,50 @@ namespace GLOpenTKDemo
         {
             ShaderSources[0] = LoadShaders(SIMPLEVERTEX);
             ShaderSources[1] = LoadShaders(SIMPLEFRAGMENT);
+            ShaderSources[2] = LoadShaders(ADVVertex);
+            ShaderSources[3] = LoadShaders(ADVFRAGMENT);
+            ShaderSources[4] = LoadShaders(ADV2FRAGMENT);
+            shaderCount = 5;
         }
 
         public void Initialize()
         {
             LoadFromFile();
             CreateProgram(0, 1, 0, false);
+            CreateProgram(0, 3, 1, false);
+            CreateProgram(2, 4, 2, false);
 
         }
 
         public void Update()
         {
-            String[] uudet = new String[2];
+            String[] uudet = new String[shaderCount];
             bool changed = false;
             uudet[0] = LoadShaders(SIMPLEVERTEX);
             uudet[1] = LoadShaders(SIMPLEFRAGMENT);
-            if (uudet[0] != ShaderSources[0])
+            uudet[2] = LoadShaders(ADVVertex);
+            uudet[3] = LoadShaders(ADVFRAGMENT);
+            uudet[4] = LoadShaders(ADV2FRAGMENT);
+            for (int i = 0; i < shaderCount; i++)
             {
-                changed = true;
-                ShaderSources[0] = uudet[0];
-                GL.DeleteShader(ShaderIds[0]);
+                if (uudet[i] != ShaderSources[i])
+                {
+                    changed = true;
+                    ShaderSources[i] = uudet[i];
+                    GL.DeleteShader(ShaderIds[i]);
+                }
             }
-            if (uudet[1] != ShaderSources[1]) {
+            /*if (uudet[1] != ShaderSources[1]) {
                 changed = true;
                 ShaderSources[1] = uudet[1];
                 GL.DeleteShader(ShaderIds[1]);
-            }
+            }*/
             if (changed)
             {
                 System.Console.WriteLine("Shaders: Updated program!");
                 CreateProgram(0, 1, 0, true);
+                CreateProgram(0, 3, 1, true);
+                CreateProgram(2, 4, 2, true);
             }
             else
                 System.Console.WriteLine("Shaders: No change in shader sources!");
