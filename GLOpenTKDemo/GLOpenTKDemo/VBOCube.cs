@@ -12,7 +12,7 @@ namespace GLOpenTKDemo
 {
     class VBOCube
     {
-        Matrix4 ModelMatrix;
+        Matrix4 ModelMatrix,ViewMatrix;
         private int VaoId, VboId, ColorBufferId;
         float[] Vertices;
         float[] Colors = {
@@ -37,16 +37,17 @@ namespace GLOpenTKDemo
         public VBOCube(float x, float y, float z, float scale)
         {
             Vertices = new float[]{
-           x-(scale*0.5f), y-(scale*0.5f), z+(scale*0.5f), 1 , 
-           x-(scale*0.5f), y+(scale*0.5f), z+(scale*0.5f), 1 ,
-           x+(scale*0.5f), y+(scale*0.5f), z+(scale*0.5f), 1 , 
-           x+(scale*0.5f), y-(scale*0.5f), z+(scale*0.5f), 1 , 
-           x-(scale*0.5f), y-(scale*0.5f), z-(scale*0.5f), 1 , 
-           x-(scale*0.5f), y+(scale*0.5f), z-(scale*0.5f), 1 ,
-           x+(scale*0.5f), y+(scale*0.5f), z-(scale*0.5f), 1 , 
-           x+(scale*0.5f), y-(scale*0.5f), z-(scale*0.5f), 1 , 
+           -(scale*0.5f), -(scale*0.5f), (scale*0.5f), 1 , 
+           -(scale*0.5f), (scale*0.5f), (scale*0.5f), 1 ,
+           (scale*0.5f), (scale*0.5f), (scale*0.5f), 1 , 
+           (scale*0.5f), -(scale*0.5f), (scale*0.5f), 1 , 
+           -(scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
+           -(scale*0.5f), (scale*0.5f), -(scale*0.5f), 1 ,
+           (scale*0.5f), (scale*0.5f), -(scale*0.5f), 1 , 
+           (scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
           };
-            ModelMatrix = Matrix4.Identity;
+            ViewMatrix = Matrix4.Identity;
+            ModelMatrix = Matrix4.CreateTranslation(new Vector3(x,y,z));
         }
 
         public void loadToGpu() 
@@ -81,10 +82,23 @@ namespace GLOpenTKDemo
         {
             return ModelMatrix;
         }
+        public Matrix4 getViewMatrix()
+        {
+            return ViewMatrix;
+        }
 
         public void setModelMatrix(Matrix4 mat)
         {
             ModelMatrix = mat;
+        }
+        public void setViewMatrix(Matrix4 mat)
+        {
+            ViewMatrix = mat;
+        }
+
+        public Matrix4 getModelViewMatrix()
+        {
+            return Matrix4.Mult(ViewMatrix, ModelMatrix);
         }
 
         public void drawFirst()

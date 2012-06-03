@@ -22,15 +22,21 @@ namespace GLOpenTKDemo
         SoundPlayer player = new SoundPlayer();
         string path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
 
+        Random randNum;
         int fps;
         long time;
+        long tick;
+        float speed;
         Graphics graphics;
         /// <summary>Creates a 800x600 window with the specified title.</summary>
         public Demo()
             : base(1280, 720, new GraphicsMode(32, 24, 8, 0), "The Demo Effect", GameWindowFlags.Default, DisplayDevice.Default, 3, 3, GraphicsContextFlags.Debug)
         {
-            VSync = VSyncMode.Off;
+            VSync = VSyncMode.On;
             fps = 0;
+            tick = 0;
+            speed = 0.0f;
+            randNum = new Random(1);
             time = System.DateTime.Now.Millisecond + (System.DateTime.Now.Second * 1000) + (System.DateTime.Now.Minute * 60000);
         }
 
@@ -43,7 +49,7 @@ namespace GLOpenTKDemo
             graphics.Initialize(); 
             player.SoundLocation = path + @"\demostep.wav";
             player.Load();
-            player.Play();
+            //player.Play();
             // Compose a string that consists of three lines.
 
         }
@@ -162,7 +168,10 @@ namespace GLOpenTKDemo
             {
                 graphics.addCube(0.7f, 0, 8,0.5f);
             }
-
+            if (Keyboard[Key.R])
+            {
+                graphics.moveObjectOnX(-0.02f);
+            }
         }
 
         /// <summary>
@@ -173,9 +182,32 @@ namespace GLOpenTKDemo
         {
             
             base.OnRenderFrame(e);
+            /*
+            double fun = randNum.Next(100);
+
+            if (tick == 60*6)
+            {
+                speed = 0.0011f;
+                System.Console.WriteLine("changed speed to 0.002f");
+            } 
+            else if (tick == 60*20)
+            {
+                speed = 0.0003f;
+                tick = 0;
+                System.Console.WriteLine("changed speed to 0.001f");
+            }
+
+            graphics.rotateObjectByX((float)fun * (0.001f + speed));
+            fun = randNum.Next(100);
+            graphics.rotateObjectByX((float)fun * (0.001f + speed));
+            fun = randNum.Next(100);
+            graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/
+
+
             graphics.Render();
             SwapBuffers();
-            fps++;
+            fps++; tick++;
+
             long now = System.DateTime.Now.Millisecond + (System.DateTime.Now.Second * 1000) + (System.DateTime.Now.Minute * 60000);
             if (now - time > 1000)
             {

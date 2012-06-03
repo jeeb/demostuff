@@ -81,7 +81,7 @@ namespace GLOpenTKDemo
         public void onResize(int a, int b, int c, int d, int x, int y)
         {
             GL.Viewport(a, b, c, d);
-            resolution = new Vector2(x, y);
+            resolution = new Vector2(x/2, y/2);
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, x / (float)y, 1.0f, 90.0f);
             ProjectionMatrix = projection;
         }
@@ -100,8 +100,8 @@ namespace GLOpenTKDemo
             GL.EnableVertexAttribArray(1); 
             for (int i = 0; i < count; i++)
             {
-                ModelMatrix = objects[i].getModelMatrix();
-                GL.UniformMatrix4(modelLocation, false, ref ModelMatrix);
+                Matrix4 ModelViewMatrix = objects[i].getModelViewMatrix();
+                GL.UniformMatrix4(modelLocation, false, ref ModelViewMatrix);
                 objects[i].draw();
             }
 
@@ -122,7 +122,7 @@ namespace GLOpenTKDemo
             //ModelMatrix = Matrix4.Mult(ModelMatrix, Matrix4.CreateRotationX(x));
             for (int i = 0; i < count; i++)
             {
-                objects[i].setModelMatrix(Matrix4.Mult(objects[i].getModelMatrix(), Matrix4.CreateRotationX(x)));
+                objects[i].setViewMatrix(Matrix4.Mult(objects[i].getViewMatrix(), Matrix4.CreateRotationX(x)));
             }
         }
 
@@ -130,7 +130,7 @@ namespace GLOpenTKDemo
         {
             for (int i = 0; i < count; i++)
             {
-                objects[i].setModelMatrix(Matrix4.Mult(objects[i].getModelMatrix(), Matrix4.CreateRotationY(y)));
+                objects[i].setViewMatrix(Matrix4.Mult(objects[i].getViewMatrix(), Matrix4.CreateRotationY(y)));
             }
         }
 
@@ -138,7 +138,7 @@ namespace GLOpenTKDemo
         {
             for (int i = 0; i < count; i++)
             {
-                objects[i].setModelMatrix(Matrix4.Mult(objects[i].getModelMatrix(), Matrix4.CreateRotationZ(z)));
+                objects[i].setViewMatrix(Matrix4.Mult(objects[i].getViewMatrix(), Matrix4.CreateRotationZ(z)));
             }
         }
 
@@ -169,6 +169,14 @@ namespace GLOpenTKDemo
             Matrix4 heh = Matrix4.CreateRotationZ(z);
             Matrix4 asd = ViewMatrix;
             ViewMatrix = Matrix4.Mult(asd, heh);
+        }
+
+        public void moveObjectOnX(float constant_x)
+        {
+            for (int i = 0; i < 1; i++)
+            {
+                objects[i].setModelMatrix(Matrix4.Mult(Matrix4.CreateTranslation(new Vector3(constant_x, 0, 0)), objects[i].getModelMatrix()));
+            }
         }
     }
 }
