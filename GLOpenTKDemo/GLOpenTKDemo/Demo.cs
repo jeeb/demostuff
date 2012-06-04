@@ -204,10 +204,16 @@ namespace GLOpenTKDemo
             graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/
 
 
-            graphics.Render();
+            graphics.Render(0);
             SwapBuffers();
-            fps++; tick++;
+            tick++;
 
+            fpsCounter();
+        }
+
+        protected void fpsCounter()
+        {
+            fps++;
             long now = System.DateTime.Now.Millisecond + (System.DateTime.Now.Second * 1000) + (System.DateTime.Now.Minute * 60000);
             if (now - time > 1000)
             {
@@ -216,7 +222,6 @@ namespace GLOpenTKDemo
                 time = now;
             }
         }
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
