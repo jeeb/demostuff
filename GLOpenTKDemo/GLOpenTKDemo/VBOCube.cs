@@ -63,14 +63,12 @@ namespace GLOpenTKDemo
             GL.GenBuffers(1, out ColorBufferId);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ColorBufferId);
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(float)), indices, BufferUsageHint.StaticDraw);
-            
-            
-
-        
         }
 
         public void draw()
         {
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
             //GL.BindVertexArray(VaoId);
             GL.BindBuffer(BufferTarget.ArrayBuffer, VboId);
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
@@ -109,6 +107,8 @@ namespace GLOpenTKDemo
 
         public void drawFirst()
         {
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
             GL.DepthMask(false);
             GL.BindBuffer(BufferTarget.ArrayBuffer, VboId);
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);

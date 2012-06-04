@@ -10,21 +10,37 @@ namespace GLOpenTKDemo
         private VBOCube[] objects;
         private VBOCube background;
         private int objectCount;
+        private bool initialized;
         public Scene(int objectCount)
         {
             objects = new VBOCube[objectCount];
+            initialized = false;
+        }
+
+        public void initialize()
+        {
+            background.loadToGpu();
+            //hullu foreach, ihme syntaxi
+            for (int i = 0; i < objectCount;i++ )
+                objects[i].loadToGpu();
+            initialized = true;
+        }
+
+        public bool isInit()
+        {
+            return initialized;
         }
 
         public void setBackground(VBOCube background)
         {
             this.background = background;
-            background.loadToGpu();
+            //background.loadToGpu();
         }
 
         public void addNewVBOCube(VBOCube cube)
         {
             objects[objectCount++] = cube;
-            cube.loadToGpu();
+            //cube.loadToGpu();
         }
 
         public int getCount()

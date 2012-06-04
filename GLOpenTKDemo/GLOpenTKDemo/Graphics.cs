@@ -43,9 +43,9 @@ namespace GLOpenTKDemo
             ProjectionMatrix = Matrix4.Identity;
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
-            //GL.Enable(EnableCap.CullFace);
-           // GL.CullFace(CullFaceMode.Back);
-            //GL.FrontFace(FrontFaceDirection.Ccw);
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
+            GL.FrontFace(FrontFaceDirection.Ccw);
 
             shader.Initialize();
 
@@ -53,9 +53,7 @@ namespace GLOpenTKDemo
             if (ErrorCheckValue != ErrorCode.NoError)
                 Trace.WriteLine("Error at Creating Shaders: " + ErrorCheckValue);
 
-            // Creating a VBO object now, and after it Indexed vb. In otherwords ElementBuffer
-            scenes = new Scene[10];
-            scenes[0] = new Scene(1000);
+            //Binding UniformLocations to variables found in shader files
             modelLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ModelMatrix");
             viewLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ViewMatrix");
             projectionLocation = GL.GetUniformLocation(shader.ProgramIds[0], "ProjectionMatrix");
@@ -63,10 +61,28 @@ namespace GLOpenTKDemo
             resoLocation = GL.GetUniformLocation(shader.ProgramIds[0], "resolution");
 
             resolution = new Vector2(1280, 720);
-            scenes[0].setBackground(new VBOCube(0, 0, 0, 20.0f, 0));
+
+            scenes = new Scene[10];
+            scenes[0] = new Scene(1000);
+            scenes[1] = new Scene(10);
+
+            // Creating a VBO object now, and after it Indexed vb. In otherwords ElementBuffer
+            scenes[0].setBackground(new VBOCube(0, 0, 0, 10.0f, 0));
             scenes[0].addNewVBOCube(new VBOCube(0, 0, 0, 0.5f, 0));
             scenes[0].addNewVBOCube(new VBOCube(0.5f,  0.5f, 0, 0.5f, 0));
             scenes[0].addNewVBOCube(new VBOCube(0, -0.5f, 0, 0.5f, 0));
+            scenes[0].initialize();
+
+            scenes[1].setBackground(new VBOCube(0, 0, 0, 10.0f, 1));
+            scenes[1].addNewVBOCube(new VBOCube(0, 0, 0, 0.5f, 1));
+            scenes[1].addNewVBOCube(new VBOCube(0.7f, 0, 0, 0.5f, 1));
+            scenes[1].addNewVBOCube(new VBOCube(-0.7f, 0, 0, 0.5f, 1));
+            scenes[1].addNewVBOCube(new VBOCube(0, 0, 0.7f, 0.5f, 1));
+            scenes[1].addNewVBOCube(new VBOCube(0, 0, -0.7f, 0.5f, 1));
+            scenes[1].addNewVBOCube(new VBOCube(0, 0.7f, 0, 0.5f, 1));
+            scenes[1].addNewVBOCube(new VBOCube(0, -0.7f, 0, 0.5f, 1));
+            scenes[1].initialize();
+
             ErrorCheckValue = GL.GetError();
             if (ErrorCheckValue != ErrorCode.NoError)
                 Trace.WriteLine("Error at Creating VBO: " + ErrorCheckValue);
@@ -81,29 +97,48 @@ namespace GLOpenTKDemo
         {
             GL.Viewport(a, b, c, d);
             resolution = new Vector2(x/2, y/2);
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, x / (float)y, 1.0f, 90.0f);
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, x / (float)y, 0.2f, 90.0f);
             ProjectionMatrix = projection;
         }
 
         public void Render(int sceneId)
         {
             currentSceneId = sceneId;
-            GL.UseProgram(shader.ProgramIds[0]);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            scenes[sceneId].getBackground().drawFirst();
+
+            updateShaderStuff(scenes[currentSceneId].getBackground().getShaderProgramId());
             float time = System.DateTime.Now.Millisecond * 0.01f;
             GL.Uniform1(timeLocation, 1, ref time);
             GL.Uniform2(resoLocation, ref resolution);
             GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
             GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
-            GL.EnableVertexAttribArray(0);
-            GL.EnableVertexAttribArray(1); 
+
+            GL.UseProgram(scenes[currentSceneId].getBackground().getShaderProgramId());
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Matrix4 ModelViewMatrix = scenes[currentSceneId].getBackground().getModelViewMatrix();
+            GL.UniformMatrix4(modelLocation, false, ref ModelViewMatrix);
+            scenes[currentSceneId].getBackground().drawFirst();
+
+            //Linking all the shader info so that we can use them
+
+            //hmm
+            //GL.EnableVertexAttribArray(0);
+            //GL.EnableVertexAttribArray(1);
+
+            //debug
+            //System.Console.WriteLine(scenes[currentSceneId].getCount());
             for (int i = 0; i < scenes[currentSceneId].getCount(); i++)
             {
-                GL.UseProgram(shader.ProgramIds[scenes[sceneId].getObjects()[i].getShaderProgramId()]);
-                Matrix4 ModelViewMatrix = scenes[sceneId].getObjects()[i].getModelViewMatrix();
-                GL.UniformMatrix4(modelLocation, false, ref ModelViewMatrix);
-                scenes[sceneId].getObjects()[i].draw();
+                updateShaderStuff(scenes[currentSceneId].getObjects()[i].getShaderProgramId());
+
+                GL.Uniform1(timeLocation, 1, ref time);
+                GL.Uniform2(resoLocation, ref resolution);
+                GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
+                GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
+
+                GL.UseProgram(shader.ProgramIds[scenes[currentSceneId].getObjects()[i].getShaderProgramId()]);
+                Matrix4 MVMatrix = scenes[currentSceneId].getObjects()[i].getModelViewMatrix();
+                GL.UniformMatrix4(modelLocation, false, ref MVMatrix);
+                scenes[currentSceneId].getObjects()[i].draw();
             }
 
             GL.UseProgram(0);
@@ -174,6 +209,21 @@ namespace GLOpenTKDemo
             {
                 scenes[currentSceneId].getObjects()[i].setModelMatrix(Matrix4.Mult(Matrix4.CreateTranslation(new Vector3(constant_x, 0, 0)), scenes[currentSceneId].getObjects()[i].getModelMatrix()));
             }
+        }
+
+        public void initializeScene(int ID)
+        {
+            if (!scenes[ID].isInit())
+                scenes[ID].initialize();
+        }
+
+        public void updateShaderStuff(int ID)
+        {
+            modelLocation = GL.GetUniformLocation(shader.ProgramIds[ID], "ModelMatrix");
+            viewLocation = GL.GetUniformLocation(shader.ProgramIds[ID], "ViewMatrix");
+            projectionLocation = GL.GetUniformLocation(shader.ProgramIds[ID], "ProjectionMatrix");
+            timeLocation = GL.GetUniformLocation(shader.ProgramIds[ID], "time");
+            resoLocation = GL.GetUniformLocation(shader.ProgramIds[ID], "resolution");
         }
     }
 }

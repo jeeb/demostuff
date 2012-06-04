@@ -27,7 +27,7 @@ namespace GLOpenTKDemo
         public Shaders()
         {
             shaderCount = 5;
-            programCount = 3;
+            programCount = 2;
             ShaderSources = new string[shaderCount];
             ShaderIds = new int[shaderCount];
             ProgramIds = new int[programCount];
@@ -84,20 +84,25 @@ namespace GLOpenTKDemo
             if (UpdateProgram == true)
                 GL.DeleteProgram(ProgramIds[programid]);
             ErrorCode ErrorCheckValue = GL.GetError();
+
+            //VertexShader
             ShaderIds[vertex] = GL.CreateShader(ShaderType.VertexShader);
             GL.ShaderSource(ShaderIds[vertex], ShaderSources[vertex]);
             GL.CompileShader(ShaderIds[vertex]);
 
+            //Fragment Shader
             ShaderIds[fragment] = GL.CreateShader(ShaderType.FragmentShader);
             GL.ShaderSource(ShaderIds[fragment], ShaderSources[fragment]);
             GL.CompileShader(ShaderIds[fragment]);
 
+            //Putting them together as program
             ProgramIds[programid] = GL.CreateProgram();
             GL.AttachShader(ProgramIds[programid], ShaderIds[vertex]);
             GL.AttachShader(ProgramIds[programid], ShaderIds[fragment]);
 
+            //Linking and telling we use it... actually no.
             GL.LinkProgram(ProgramIds[programid]);
-            GL.UseProgram(ProgramIds[programid]);
+            //GL.UseProgram(ProgramIds[programid]);
 
             ErrorCheckValue = GL.GetError();
             if (ErrorCheckValue != ErrorCode.NoError)
@@ -119,8 +124,7 @@ namespace GLOpenTKDemo
         {
             LoadFromFile();
             CreateProgram(0, 1, 0, false);
-            CreateProgram(0, 3, 1, false);
-            CreateProgram(2, 4, 2, false);
+            CreateProgram(2, 3, 1, false);
 
         }
 
@@ -151,14 +155,10 @@ namespace GLOpenTKDemo
             {
                 System.Console.WriteLine("Shaders: Updated program!");
                 CreateProgram(0, 1, 0, true);
-                CreateProgram(0, 3, 1, true);
-                CreateProgram(2, 4, 2, true);
+                CreateProgram(2, 3, 1, true);
             }
             else
                 System.Console.WriteLine("Shaders: No change in shader sources!");
         }
-            
-            
-
     }
 }
