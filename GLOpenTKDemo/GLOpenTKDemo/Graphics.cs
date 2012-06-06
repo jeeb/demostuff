@@ -64,24 +64,29 @@ namespace GLOpenTKDemo
 
             scenes = new Scene[10];
             scenes[0] = new Scene(1000);
-            scenes[1] = new Scene(10);
 
             // Creating a VBO object now, and after it Indexed vb. In otherwords ElementBuffer
-            scenes[0].setBackground(new VBOCube(0, 0, 0, 10.0f, 0));
-            scenes[0].addNewVBOCube(new VBOCube(0, 0, 0, 0.5f, 0));
-            scenes[0].addNewVBOCube(new VBOCube(0.5f,  0.5f, 0, 0.5f, 0));
-            scenes[0].addNewVBOCube(new VBOCube(0, -0.5f, 0, 0.5f, 0));
-            scenes[0].initialize();
+            scenes[0].setBackground(new VBOCube(0, 0, 0, 10.0f, 0, true));
+            //scenes[0].addNewVBOCube(new VBOCube(0, 0, 0, 10.0f, 0, true));
+            //scenes[0].addNewVBOCube(new VBOCube(0, 0, 0, 0.5f, 0));
+            //scenes[0].addNewVBOCube(new VBOCube(0.5f,  0.5f, 0, 0.5f, 0));
+            //scenes[0].addNewVBOCube(new VBOCube(0, -0.5f, 0, 0.5f, 0));
+            initializeScene(0);
 
-            scenes[1].setBackground(new VBOCube(0, 0, 0, 10.0f, 1));
-            scenes[1].addNewVBOCube(new VBOCube(0, 0, 0, 0.5f, 1));
-            scenes[1].addNewVBOCube(new VBOCube(0.7f, 0, 0, 0.5f, 1));
-            scenes[1].addNewVBOCube(new VBOCube(-0.7f, 0, 0, 0.5f, 1));
-            scenes[1].addNewVBOCube(new VBOCube(0, 0, 0.7f, 0.5f, 1));
-            scenes[1].addNewVBOCube(new VBOCube(0, 0, -0.7f, 0.5f, 1));
-            scenes[1].addNewVBOCube(new VBOCube(0, 0.7f, 0, 0.5f, 1));
-            scenes[1].addNewVBOCube(new VBOCube(0, -0.7f, 0, 0.5f, 1));
-            scenes[1].initialize();
+            scenes[1] = new Scene(10);
+            scenes[1].setBackground(new VBOCube(0, 0, 0, 10.0f, 1, true));
+            //scenes[1].addNewVBOCube(new VBOCube(0, 0, 0, 0.5f, 1));
+            //scenes[1].addNewVBOCube(new VBOCube(0.7f, 0, 0, 0.5f, 1));
+            //scenes[1].addNewVBOCube(new VBOCube(-0.7f, 0, 0, 0.5f, 1));
+            //scenes[1].addNewVBOCube(new VBOCube(0, 0, 0.7f, 0.5f, 1));
+            //scenes[1].addNewVBOCube(new VBOCube(0, 0, -0.7f, 0.5f, 1));
+            //scenes[1].addNewVBOCube(new VBOCube(0, 0.7f, 0, 0.5f, 1));
+            //scenes[1].addNewVBOCube(new VBOCube(0, -0.7f, 0, 0.5f, 1));
+            initializeScene(1);
+
+            //scenes[5].setBackground(new VBOCube(0, 0, 0, 20.0f, 2, true));
+            //initializeScene(5);
+
 
             ErrorCheckValue = GL.GetError();
             if (ErrorCheckValue != ErrorCode.NoError)
@@ -105,29 +110,25 @@ namespace GLOpenTKDemo
         {
             currentSceneId = sceneId;
 
-            updateShaderStuff(scenes[currentSceneId].getBackground().getShaderProgramId());
             float time = System.DateTime.Now.Millisecond * 0.01f;
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            //Piirretään tausta
+            GL.UseProgram(shader.ProgramIds[scenes[currentSceneId].getBackground().getShaderProgramId()]);
+            updateShaderStuff(scenes[currentSceneId].getBackground().getShaderProgramId());
+
             GL.Uniform1(timeLocation, 1, ref time);
             GL.Uniform2(resoLocation, ref resolution);
             GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
             GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
 
-            GL.UseProgram(scenes[currentSceneId].getBackground().getShaderProgramId());
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Matrix4 ModelViewMatrix = scenes[currentSceneId].getBackground().getModelViewMatrix();
-            GL.UniformMatrix4(modelLocation, false, ref ModelViewMatrix);
-            scenes[currentSceneId].getBackground().drawFirst();
+            Matrix4 MVMatrix = scenes[currentSceneId].getBackground().getModelViewMatrix();
+            GL.UniformMatrix4(modelLocation, false, ref MVMatrix);
+            scenes[currentSceneId].getBackground().draw();
 
-            //Linking all the shader info so that we can use them
-
-            //hmm
-            //GL.EnableVertexAttribArray(0);
-            //GL.EnableVertexAttribArray(1);
-
-            //debug
-            //System.Console.WriteLine(scenes[currentSceneId].getCount());
+            //Piirretään kaikki scenen objectit
             for (int i = 0; i < scenes[currentSceneId].getCount(); i++)
             {
+                GL.UseProgram(shader.ProgramIds[scenes[currentSceneId].getObjects()[i].getShaderProgramId()]);
                 updateShaderStuff(scenes[currentSceneId].getObjects()[i].getShaderProgramId());
 
                 GL.Uniform1(timeLocation, 1, ref time);
@@ -135,8 +136,8 @@ namespace GLOpenTKDemo
                 GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
                 GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
 
-                GL.UseProgram(shader.ProgramIds[scenes[currentSceneId].getObjects()[i].getShaderProgramId()]);
-                Matrix4 MVMatrix = scenes[currentSceneId].getObjects()[i].getModelViewMatrix();
+                
+                MVMatrix = scenes[currentSceneId].getObjects()[i].getModelViewMatrix();
                 GL.UniformMatrix4(modelLocation, false, ref MVMatrix);
                 scenes[currentSceneId].getObjects()[i].draw();
             }

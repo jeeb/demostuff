@@ -25,7 +25,17 @@ namespace GLOpenTKDemo
             1, 0, 1, 1,
             0, 0, 1, 1
           };
-        uint[] indices = {
+        uint[] indices;
+
+        uint[] background = {
+            1,2,0, 2,3,0,
+            0,3,4, 3,7,4,
+            5,1,4, 1,0,4,
+            2,6,3, 6,7,3,
+            5,6,1, 6,2,1,
+            6,5,7, 5,4,7
+        };
+        uint[] normal = {
             0,2,1, 0,3,2,
             4,3,0, 4,7,3,
             4,1,5, 4,0,1,
@@ -34,6 +44,28 @@ namespace GLOpenTKDemo
             7,5,6, 7,4,5
         };
 
+        public VBOCube(float x, float y, float z, float scale, int ShaderProgramId, bool isBackground)
+        {
+            this.ShaderProgramId = ShaderProgramId;
+            Vertices = new float[]{
+           -(scale*0.5f), -(scale*0.5f),  (scale*0.5f), 1 , 
+           -(scale*0.5f),  (scale*0.5f),  (scale*0.5f), 1 ,
+            (scale*0.5f),  (scale*0.5f),  (scale*0.5f), 1 , 
+            (scale*0.5f), -(scale*0.5f),  (scale*0.5f), 1 , 
+           -(scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
+           -(scale*0.5f),  (scale*0.5f), -(scale*0.5f), 1 ,
+            (scale*0.5f),  (scale*0.5f), -(scale*0.5f), 1 , 
+            (scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
+          };
+
+            if (isBackground)
+                indices = background;
+            else
+                indices = normal;
+
+            ViewMatrix = Matrix4.Identity;
+            ModelMatrix = Matrix4.CreateTranslation(new Vector3(x,y,z));
+        }
         public VBOCube(float x, float y, float z, float scale, int ShaderProgramId)
         {
             this.ShaderProgramId = ShaderProgramId;
@@ -47,11 +79,17 @@ namespace GLOpenTKDemo
             (scale*0.5f),  (scale*0.5f), -(scale*0.5f), 1 , 
             (scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
           };
+
+            indices = normal;
+
             ViewMatrix = Matrix4.Identity;
-            ModelMatrix = Matrix4.CreateTranslation(new Vector3(x,y,z));
+            ModelMatrix = Matrix4.CreateTranslation(new Vector3(x, y, z));
         }
 
-        public void loadToGpu() 
+        //TODO: Jos tehdään vaa laatikoita nii annan samat vertice ja indice tiedot jokaselle eri laatikolle,
+        //      sit vaa piirretään yks objecti monta kertaa. Optimisaatiot <3.
+        //TODO: Ennen ylempää implementoi scale matriisi jotta voidaan sit saaha eri suurusia laatikoita.
+        public void loadToGpu()
         {
             GL.GenVertexArrays(1, out VaoId);
             GL.BindVertexArray(VaoId);
@@ -107,6 +145,10 @@ namespace GLOpenTKDemo
 
         public void drawFirst()
         {
+            //GL.Disable(EnableCap.CullFace);
+            //GL.CullFace(CullFaceMode.Back);
+            //GL.FrontFace(FrontFaceDirection.Ccw);
+
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
             GL.DepthMask(false);
@@ -116,6 +158,10 @@ namespace GLOpenTKDemo
             GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, 0);
             GL.DrawElements(BeginMode.Triangles, 36, DrawElementsType.UnsignedInt, 0);
             GL.DepthMask(true);
+
+            //GL.Enable(EnableCap.CullFace);
+            //GL.CullFace(CullFaceMode.Back);
+            //GL.FrontFace(FrontFaceDirection.Ccw);
         }
     }
 }

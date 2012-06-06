@@ -27,7 +27,7 @@ namespace GLOpenTKDemo
         public Shaders()
         {
             shaderCount = 5;
-            programCount = 2;
+            programCount = 3;
             ShaderSources = new string[shaderCount];
             ShaderIds = new int[shaderCount];
             ProgramIds = new int[programCount];
@@ -125,6 +125,7 @@ namespace GLOpenTKDemo
             LoadFromFile();
             CreateProgram(0, 1, 0, false);
             CreateProgram(2, 3, 1, false);
+            CreateProgram(2, 4, 2, false);
 
         }
 
@@ -156,6 +157,7 @@ namespace GLOpenTKDemo
                 System.Console.WriteLine("Shaders: Updated program!");
                 CreateProgram(0, 1, 0, true);
                 CreateProgram(2, 3, 1, true);
+                CreateProgram(2, 4, 2, true);
             }
             else
                 System.Console.WriteLine("Shaders: No change in shader sources!");

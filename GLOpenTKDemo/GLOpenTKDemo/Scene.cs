@@ -13,6 +13,7 @@ namespace GLOpenTKDemo
         private bool initialized;
         public Scene(int objectCount)
         {
+            this.objectCount = 0;
             objects = new VBOCube[objectCount];
             initialized = false;
         }
@@ -20,7 +21,6 @@ namespace GLOpenTKDemo
         public void initialize()
         {
             background.loadToGpu();
-            //hullu foreach, ihme syntaxi
             for (int i = 0; i < objectCount;i++ )
                 objects[i].loadToGpu();
             initialized = true;
@@ -39,7 +39,8 @@ namespace GLOpenTKDemo
 
         public void addNewVBOCube(VBOCube cube)
         {
-            objects[objectCount++] = cube;
+            objects[objectCount] = cube;
+            objectCount++;
             //cube.loadToGpu();
         }
 
