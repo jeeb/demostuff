@@ -131,7 +131,7 @@ namespace GLOpenTKDemo
             CreateProgram(0, 1, 0, false);
             CreateProgram(0, 4, 1, false);
             CreateProgram(2, 4, 2, false);
-            CreateProgram(2, 1, 3, false);
+            CreateProgram(2, 1, 4, false);
             CreateProgram(5, 6, 3, true);
         }
 
@@ -166,7 +166,7 @@ namespace GLOpenTKDemo
                 CreateProgram(0, 1, 0, true);
                 CreateProgram(0, 4, 1, true);
                 CreateProgram(2, 4, 2, true);
-                CreateProgram(2, 1, 3, true);
+                CreateProgram(2, 1, 4, true);
                 CreateProgram(5, 6, 3, true);
             }
             else

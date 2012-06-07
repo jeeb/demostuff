@@ -138,7 +138,7 @@ namespace GLOpenTKDemo
             scene.getBackground().altColors();
 
             for (int i = 0; i < count; i++)
-                scene.addNewVBOCube(new VBOCube(getCoordX(lista[i].x), getCoordY(lista[i].y), getCoordX(lista[i].z)+1.5f, 0.0035f, 3));
+                scene.addNewVBOCube(new VBOCube(getCoordX(lista[i].x), getCoordY(lista[i].y), getCoordX(lista[i].z)+1.5f, 0.0035f, 4));
 
 
             return scene;
