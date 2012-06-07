@@ -17,6 +17,8 @@ namespace GLOpenTKDemo
         private string ADVVertex = "Resources\\shaders\\adv.vertex";
         private string TunnelVertex = "Resources\\shaders\\tunnel.vertex";
         private string TunnelFragment = "Resources\\shaders\\tunnel.fragment";
+        private string NoisyVertex = "Resources\\shaders\\noisy.vertex";
+        private string NoisyFragment = "Resources\\shaders\\noisy.fragment";
         private string[] ShaderSources;
         private int[] ShaderIds;
         public int[] ProgramIds;
@@ -29,7 +31,7 @@ namespace GLOpenTKDemo
         public Shaders()
         {
 
-            shaderCount = 7;
+            shaderCount = 9;
             programCount = 5;
             ShaderSources = new string[shaderCount];
             ShaderIds = new int[shaderCount];
@@ -122,7 +124,9 @@ namespace GLOpenTKDemo
             ShaderSources[4] = LoadShaders(ADV2FRAGMENT);
             ShaderSources[5] = LoadShaders(TunnelVertex);
             ShaderSources[6] = LoadShaders(TunnelFragment);
-            shaderCount = 7;
+            ShaderSources[7] = LoadShaders(NoisyVertex);
+            ShaderSources[8] = LoadShaders(NoisyFragment);
+            shaderCount = 9;
         }
 
         public void Initialize()
