@@ -201,10 +201,18 @@ namespace GLOpenTKDemo
             fun = randNum.Next(100);
             graphics.rotateObjectByX((float)fun * (0.001f + speed));
             fun = randNum.Next(100);
-            graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/                 
-       
+            graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/
 
-            if (tick == 60 * 20.4 && !stupid)
+
+            if (tick > 60 * 32)
+            {
+                Exit();
+            }
+            else if (tick > 60 * 26)
+            {
+                graphics.Render(3);
+            }
+            else if (tick == 60 * 20.4 && !stupid)
             {
                 graphics.destroyCube();
                 graphics.destroyCube();
@@ -214,7 +222,6 @@ namespace GLOpenTKDemo
             {
                 graphics.Render(2);
             }
- 
             else if (tick > 60*4)
             {
                 graphics.Render(6);
