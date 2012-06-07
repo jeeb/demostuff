@@ -82,7 +82,7 @@ namespace GLOpenTKDemo
             //scenes[5] = new Scene(10000);
             //scenes[5].setBackground(new VBOCube(0, 0, 0, 10.0f, 2, true));
 
-            scenes[2] = new Scene(10);
+            scenes[2] = new Scene(15);
             scenes[2].setBackground(new VBOCube(0, 0, 0, 10.0f, 3, true));
             scenes[2].addNewVBOCube(new VBOCube(0.7f, 0, 0, 2.0f, 2));
             scenes[2].addNewVBOCube(new VBOCube(-0.7f, 0, 0, 2.0f, 2));
@@ -246,6 +246,7 @@ namespace GLOpenTKDemo
             resoLocation = GL.GetUniformLocation(shader.ProgramIds[ID], "resolution");
         }
 
+
         public void createUu() 
         {
             for (int i = 0; i < scenes[currentSceneId].getObjects().Length; i++)
@@ -293,6 +294,11 @@ namespace GLOpenTKDemo
                 createUu();
                 //graphics.Render(5);
             }
+        }
+
+        public void destroyCube()
+        {
+            scenes[currentSceneId].killCube();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace GLOpenTKDemo
     {
         SoundPlayer player = new SoundPlayer();
         string path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-
+        bool stupid = false;
         Random randNum;
         int fps;
         long time;
@@ -49,7 +49,7 @@ namespace GLOpenTKDemo
             graphics.Initialize(); 
             player.SoundLocation = path + @"\demostep.wav";
             player.Load();
-            //player.Play();
+            player.Play();
             // Compose a string that consists of three lines.
 
         }
@@ -201,12 +201,20 @@ namespace GLOpenTKDemo
             fun = randNum.Next(100);
             graphics.rotateObjectByX((float)fun * (0.001f + speed));
             fun = randNum.Next(100);
-            graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/
+            graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/                 
+       
 
-            if (tick > 60 * 16)
+            if (tick == 60 * 20.4 && !stupid)
+            {
+                graphics.destroyCube();
+                graphics.destroyCube();
+                stupid = true;
+            }  
+            else if (tick > 60 * 16)
             {
                 graphics.Render(2);
-            }     
+            }
+ 
             else if (tick > 60*4)
             {
                 graphics.Render(6);

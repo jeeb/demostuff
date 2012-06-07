@@ -57,5 +57,11 @@ namespace GLOpenTKDemo
         {
             return background;
         }
+
+        public void killCube()
+        {
+            objectCount--;
+            objects[objectCount] = null;
+        }
     }
 }
