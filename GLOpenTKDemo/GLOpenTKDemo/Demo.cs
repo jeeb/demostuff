@@ -203,15 +203,15 @@ namespace GLOpenTKDemo
             fun = randNum.Next(100);
             graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/
 
-            /*if (tick > 60 * 4)
-            {
-                graphics.Render(1);
-            }*/      
-            /*if (tick > 0)
+            if (tick > 60 * 4)
             {
                 graphics.Render(2);
-            }*/
-            graphics.Render(2);
+            }     
+            else if (tick > 0)
+            {
+                graphics.Render(5);
+            }
+            //graphics.Render(2);
             SwapBuffers();
             tick++;
 
