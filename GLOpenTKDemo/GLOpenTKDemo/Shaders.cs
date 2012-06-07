@@ -14,6 +14,7 @@ namespace GLOpenTKDemo
         private string SIMPLEFRAGMENT = "Resources\\shaders\\simple.fragment";
         private string ADVFRAGMENT = "Resources\\shaders\\adv.fragment";
         private string ADV2FRAGMENT = "Resources\\shaders\\adv2.fragment";
+        private string ADV2VERTEX = "Resources\\shaders\\adv2.vertex";
         private string ADVVertex = "Resources\\shaders\\adv.vertex";
         private string TunnelVertex = "Resources\\shaders\\tunnel.vertex";
         private string TunnelFragment = "Resources\\shaders\\tunnel.fragment";
@@ -31,8 +32,8 @@ namespace GLOpenTKDemo
         public Shaders()
         {
 
-            shaderCount = 9;
-            programCount = 6;
+            shaderCount = 10;
+            programCount = 7;
             ShaderSources = new string[shaderCount];
             ShaderIds = new int[shaderCount];
             ProgramIds = new int[programCount];
@@ -126,7 +127,8 @@ namespace GLOpenTKDemo
             ShaderSources[6] = LoadShaders(TunnelFragment);
             ShaderSources[7] = LoadShaders(NoisyVertex);
             ShaderSources[8] = LoadShaders(NoisyFragment);
-            shaderCount = 9;
+            ShaderSources[9] = LoadShaders(ADV2VERTEX);
+            shaderCount = 10;
         }
 
         public void Initialize()
@@ -136,8 +138,9 @@ namespace GLOpenTKDemo
             CreateProgram(0, 4, 1, false);
             CreateProgram(2, 4, 2, false);
             CreateProgram(5, 6, 3, false);
-            CreateProgram(2, 1, 4, false);
+            CreateProgram(2, 1, 4, false); // elämuuta
             CreateProgram(7, 8, 5, false);
+            CreateProgram(9, 1, 6, false);
         }
 
         public void Update()
@@ -176,6 +179,7 @@ namespace GLOpenTKDemo
                 CreateProgram(5, 6, 3, true);
                 CreateProgram(2, 1, 4, true);
                 CreateProgram(7, 8, 5, true);
+                CreateProgram(2, 1, 6, true);
             }
             else
                 System.Console.WriteLine("Shaders: No change in shader sources!");

@@ -95,10 +95,14 @@ namespace GLOpenTKDemo
             //scenes[3].addNewVBOCube(new VBOCube(0.7f, 0, 0.4f, ((float)Math.PI / 3), 2)); // Dunno, liikkuva boksi vai ei
             initializeScene(3);
 
-
-            UuNyaaBuilder builder = new UuNyaaBuilder();
-            scenes[5] = builder.sceneBuilder();
+            UuNyaaBuilder builder2 = new UuNyaaBuilder(4);
+            scenes[5] = builder2.sceneBuilder();
             initializeScene(5);
+
+
+            UuNyaaBuilder builder = new UuNyaaBuilder(6);
+            scenes[6] = builder.sceneBuilder();
+            initializeScene(6);
 
 
             ErrorCheckValue = GL.GetError();

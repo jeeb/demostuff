@@ -203,14 +203,18 @@ namespace GLOpenTKDemo
             fun = randNum.Next(100);
             graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/
 
-            if (tick > 60 * 12)
+            if (tick > 60 * 16)
             {
                 graphics.Render(2);
             }     
+            else if (tick > 60*4)
+            {
+                graphics.Render(6);
+                graphics.animateUuNyaa();
+            }
             else if (tick > 0)
             {
                 graphics.Render(5);
-                graphics.animateUuNyaa();
             }
             //graphics.Render(2);
             SwapBuffers();

@@ -13,12 +13,15 @@ namespace GLOpenTKDemo
         private Nya nya;
         private Random rand;
 
-        public UuNyaaBuilder()
+        private int objShaderId;
+
+        public UuNyaaBuilder(int objShaderId)
         {
             source = new string[61];
             uu = new Uu();
             nya = new Nya();
             rand = new Random(0);
+            this.objShaderId = objShaderId;
         }
 
         private void loadFile()
@@ -140,7 +143,7 @@ namespace GLOpenTKDemo
             scene.getBackground().altColors();
 
             for (int i = 0; i < count; i++)
-                scene.addNewVBOCube(new VBOCube(getCoordX(lista[i].x), getCoordY(lista[i].y), getCoordX(lista[i].z) + 1.5f, 0.0035f, 4, new UuNya(getCoordX(lista[i].x), getCoordY(lista[i].y), 2.0f), new UuNya(getCoordX(lista[i].z), getCoordY(lista[i].y), 2.0f) ,genRandCoords()));
+                scene.addNewVBOCube(new VBOCube(getCoordX(lista[i].x), getCoordY(lista[i].y), getCoordX(lista[i].z) + 1.5f, 0.0035f, objShaderId, new UuNya(getCoordX(lista[i].x), getCoordY(lista[i].y), 2.0f), new UuNya(getCoordX(lista[i].z), getCoordY(lista[i].y), 2.0f) ,genRandCoords()));
 
 
             return scene;
