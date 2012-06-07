@@ -89,7 +89,7 @@ namespace GLOpenTKDemo
         {
             float ret = 0.0f;
 
-            ret = (y * 1.0f) * (-0.0093f)+0.2f;
+            ret = (y * 1.0f) * (-0.0033f)+0.2f;
 
             return ret;
         }
@@ -134,11 +134,11 @@ namespace GLOpenTKDemo
             }
             //for (int i = 0; i < uu.count; i++)
             Scene scene = new Scene(count);
-            scene.setBackground(new VBOCube(0, -10.0f, 0, 100.0f, 0, true));
+            scene.setBackground(new VBOCube(0, -10.0f, 0, 100.0f, 1, true));
             scene.getBackground().altColors();
 
             for (int i = 0; i < count; i++)
-                scene.addNewVBOCube(new VBOCube(getCoordX(lista[i].x), getCoordY(lista[i].y), getCoordX(lista[i].z)-20.0f, 0.0035f, 2));
+                scene.addNewVBOCube(new VBOCube(getCoordX(lista[i].x), getCoordY(lista[i].y), getCoordX(lista[i].z)+1.5f, 0.0035f, 3));
 
 
             return scene;

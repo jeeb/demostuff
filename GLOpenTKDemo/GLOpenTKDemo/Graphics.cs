@@ -22,7 +22,7 @@ namespace GLOpenTKDemo
         Matrix4 ViewMatrix;
         Matrix4 ProjectionMatrix;
         int offset;
-        int count;
+        float timah;
         private Scene[] scenes;
         private Shaders shader;
         private int currentSceneId;
@@ -32,6 +32,7 @@ namespace GLOpenTKDemo
       
         public void Initialize()
         {
+            timah = 0;
             shader = new Shaders();
             currentSceneId = 0;
 
@@ -114,13 +115,15 @@ namespace GLOpenTKDemo
         {
             currentSceneId = sceneId;
 
-            float time = System.DateTime.Now.Millisecond * 0.01f;
+            //float time = System.DateTime.Now.Millisecond * 0.001f;
+            timah += 0.02f;
+            //System.Console.WriteLine(timah);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             //Piirretään tausta
             GL.UseProgram(shader.ProgramIds[scenes[currentSceneId].getBackground().getShaderProgramId()]);
             updateShaderStuff(scenes[currentSceneId].getBackground().getShaderProgramId());
 
-            GL.Uniform1(timeLocation, 1, ref time);
+            GL.Uniform1(timeLocation, 1, ref timah);
             GL.Uniform2(resoLocation, ref resolution);
             GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
             GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
@@ -135,7 +138,7 @@ namespace GLOpenTKDemo
                 GL.UseProgram(shader.ProgramIds[scenes[currentSceneId].getObjects()[i].getShaderProgramId()]);
                 updateShaderStuff(scenes[currentSceneId].getObjects()[i].getShaderProgramId());
 
-                GL.Uniform1(timeLocation, 1, ref time);
+                GL.Uniform1(timeLocation, 1, ref timah);
                 GL.Uniform2(resoLocation, ref resolution);
                 GL.UniformMatrix4(viewLocation, false, ref ViewMatrix);
                 GL.UniformMatrix4(projectionLocation, false, ref ProjectionMatrix);
