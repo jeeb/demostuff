@@ -76,13 +76,6 @@ namespace GLOpenTKDemo
 
             scenes[1] = new Scene(10);
             scenes[1].setBackground(new VBOCube(0, 0, 0, 10.0f, 1, true));
-            //scenes[1].addNewVBOCube(new VBOCube(0, 0, 0, 0.5f, 1));
-            //scenes[1].addNewVBOCube(new VBOCube(0.7f, 0, 0, 0.5f, 1));
-            //scenes[1].addNewVBOCube(new VBOCube(-0.7f, 0, 0, 0.5f, 1));
-            //scenes[1].addNewVBOCube(new VBOCube(0, 0, 0.7f, 0.5f, 1));
-            //scenes[1].addNewVBOCube(new VBOCube(0, 0, -0.7f, 0.5f, 1));
-            //scenes[1].addNewVBOCube(new VBOCube(0, 0.7f, 0, 0.5f, 1));
-            //scenes[1].addNewVBOCube(new VBOCube(0, -0.7f, 0, 0.5f, 1));
             initializeScene(1);
 
 
@@ -95,6 +88,12 @@ namespace GLOpenTKDemo
             scenes[2].addNewVBOCube(new VBOCube(-0.7f, 0, 0, 2.0f, 2));
          
             initializeScene(2);
+
+            //JEEB!
+            scenes[3] = new Scene(0); //monta cubea sul on maksimissaan, ei kasva automaattisesti ku lisäät
+            scenes[3].setBackground(new VBOCube(0, 0, 0, 10.0f, 5, true)); //"5" on sinun shader program
+            initializeScene(3);
+
 
             UuNyaaBuilder builder = new UuNyaaBuilder();
             scenes[5] = builder.sceneBuilder();

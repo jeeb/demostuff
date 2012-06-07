@@ -32,7 +32,7 @@ namespace GLOpenTKDemo
         {
 
             shaderCount = 9;
-            programCount = 5;
+            programCount = 6;
             ShaderSources = new string[shaderCount];
             ShaderIds = new int[shaderCount];
             ProgramIds = new int[programCount];
@@ -135,8 +135,9 @@ namespace GLOpenTKDemo
             CreateProgram(0, 1, 0, false);
             CreateProgram(0, 4, 1, false);
             CreateProgram(2, 4, 2, false);
+            CreateProgram(5, 6, 3, false);
             CreateProgram(2, 1, 4, false);
-            CreateProgram(5, 6, 3, true);
+            CreateProgram(7, 8, 5, false);
         }
 
         public void Update()
@@ -150,6 +151,8 @@ namespace GLOpenTKDemo
             uudet[4] = LoadShaders(ADV2FRAGMENT);
             uudet[5] = LoadShaders(TunnelVertex);
             uudet[6] = LoadShaders(TunnelFragment);
+            uudet[7] = LoadShaders(NoisyVertex);
+            uudet[8] = LoadShaders(NoisyFragment);
             for (int i = 0; i < shaderCount; i++)
             {
                 if (uudet[i] != ShaderSources[i])
@@ -170,8 +173,9 @@ namespace GLOpenTKDemo
                 CreateProgram(0, 1, 0, true);
                 CreateProgram(0, 4, 1, true);
                 CreateProgram(2, 4, 2, true);
-                CreateProgram(2, 1, 4, true);
                 CreateProgram(5, 6, 3, true);
+                CreateProgram(2, 1, 4, true);
+                CreateProgram(7, 8, 5, true);
             }
             else
                 System.Console.WriteLine("Shaders: No change in shader sources!");
