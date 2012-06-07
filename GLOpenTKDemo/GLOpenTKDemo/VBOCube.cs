@@ -131,6 +131,17 @@ namespace GLOpenTKDemo
             current_z = z;
             vx = vz = vy = 0.0f;
         }
+        public void moveTowards(float x, float y, float z, float relative_velocity)
+        {
+            vx = (current_x - x) * relative_velocity;
+            vy = (current_y - y) * relative_velocity;
+            vz = (current_z - z) * relative_velocity;
+
+            current_x -= vx;
+            current_y -= vy;
+            current_z -= vz;
+            ModelMatrix = Matrix4.CreateTranslation(new Vector3(current_x, current_y, current_z));
+        }
 
         public void moveTowards(int target, float relative_velocity)
         {

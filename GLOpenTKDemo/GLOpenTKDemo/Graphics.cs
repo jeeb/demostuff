@@ -306,5 +306,12 @@ namespace GLOpenTKDemo
         {
             scenes[currentSceneId].killCube();
         }
+
+        public void moveCubes(float x, float y, float z, float speed) {
+            for (int i = 0; i < scenes[currentSceneId].getObjects().Length; i++)
+            {
+                scenes[currentSceneId].getObjects()[i].moveTowards(x,y,z,speed);
+            }
+        }
     }
 }

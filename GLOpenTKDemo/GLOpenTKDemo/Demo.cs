@@ -208,11 +208,15 @@ namespace GLOpenTKDemo
             {
                 Exit();
             }
-            else if (tick > 60 * 30)
+            else if (tick > 60 * 33)
             {
                 graphics.Render(3);
             }
-
+            else if (tick > 60 * 28)
+            {
+                graphics.Render(4);
+                graphics.moveCubes(1, 1, 1, 0.5f);
+            }
             else if (tick > 60 * 27)
             {
                 graphics.Render(4);
