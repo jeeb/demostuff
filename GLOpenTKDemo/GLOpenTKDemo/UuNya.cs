@@ -7,11 +7,17 @@ namespace GLOpenTKDemo
 {
     class UuNya
     {
-        public int x;
-        public int y;
-        public int z;
+        public float x;
+        public float y;
+        public float z;
 
         public UuNya(int x, int y, int z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+        public UuNya(float x, float y, float z)
         {
             this.x = x;
             this.y = y;

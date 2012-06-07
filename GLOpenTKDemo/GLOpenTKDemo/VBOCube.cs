@@ -45,6 +45,11 @@ namespace GLOpenTKDemo
             7,5,6, 7,4,5
         };
 
+        public UuNya uu;
+        public UuNya nya;
+        public UuNya rand;
+        public float current_x, current_y, current_z, vx, vy,vz;
+
         public VBOCube(float x, float y, float z, float scale, int ShaderProgramId, bool isBackground)
         {
             this.ShaderProgramId = ShaderProgramId;
@@ -100,6 +105,58 @@ namespace GLOpenTKDemo
             ModelMatrix = Matrix4.CreateTranslation(new Vector3(x, y, z));
         }
 
+        public VBOCube(float x, float y, float z, float scale, int ShaderProgramId, UuNya uu, UuNya nya, UuNya rand)
+        {
+            this.ShaderProgramId = ShaderProgramId;
+            Vertices = new float[]{
+           -(scale*0.5f), -(scale*0.5f),  (scale*0.5f), 1 , 
+           -(scale*0.5f),  (scale*0.5f),  (scale*0.5f), 1 ,
+            (scale*0.5f),  (scale*0.5f),  (scale*0.5f), 1 , 
+            (scale*0.5f), -(scale*0.5f),  (scale*0.5f), 1 , 
+           -(scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
+           -(scale*0.5f),  (scale*0.5f), -(scale*0.5f), 1 ,
+            (scale*0.5f),  (scale*0.5f), -(scale*0.5f), 1 , 
+            (scale*0.5f), -(scale*0.5f), -(scale*0.5f), 1 , 
+          };
+
+            indices = normal;
+
+            ViewMatrix = Matrix4.Identity;
+            ModelMatrix = Matrix4.CreateTranslation(new Vector3(x, y, z));
+            this.uu = uu;
+            this.nya = nya;
+            this.rand = rand;
+            current_x = x;
+            current_y = y;
+            current_z = z;
+            vx = vz = vy = 0.0f;
+        }
+
+        public void moveTowards(int target, float relative_velocity)
+        {
+            UuNya obj = null;
+            if (target == 0)
+            {
+                obj = uu;
+            }
+            else if (target == 1)
+            {
+                obj = nya;
+            }
+            else
+            {
+                obj = rand;
+            }
+            vx = (current_x - obj.x) * relative_velocity;
+            vy = (current_y - obj.y) * relative_velocity;
+            vz = (current_z - obj.z) * relative_velocity;
+
+            current_x -= vx;
+            current_y -= vy;
+            current_z -= vz;
+            ModelMatrix = Matrix4.CreateTranslation(new Vector3(current_x, current_y, current_z));
+            //this.ModelMatrix = Matrix4.Mult(Matrix4.CreateTranslation(new Vector3(vx, vy, vz)), this.getModelMatrix());
+        }
         //TODO: Jos tehdään vaa laatikoita nii annan samat vertice ja indice tiedot jokaselle eri laatikolle,
         //      sit vaa piirretään yks objecti monta kertaa. Optimisaatiot <3.
         //TODO: Ennen ylempää implementoi scale matriisi jotta voidaan sit saaha eri suurusia laatikoita.

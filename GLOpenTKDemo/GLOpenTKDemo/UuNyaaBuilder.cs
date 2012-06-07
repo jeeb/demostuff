@@ -11,12 +11,14 @@ namespace GLOpenTKDemo
         private string[] source;
         private Uu uu;
         private Nya nya;
- 
+        private Random rand;
+
         public UuNyaaBuilder()
         {
             source = new string[61];
             uu = new Uu();
             nya = new Nya();
+            rand = new Random(0);
         }
 
         private void loadFile()
@@ -68,28 +70,28 @@ namespace GLOpenTKDemo
                         nya.addCoord(z, i);
                 }
             }
-            for (int i = 32; i < source.Length-1; i++)
+            for (int i = 32; i < source.Length - 1; i++)
             {
                 for (int x = 0; x < source[i].Length; x++)
                 {
                     if (source[i][x] == 'x')
-                        uu.addCoord(x, i-32);
+                        uu.addCoord(x, i - 32);
                 }
             }
         }
 
-        private float getCoordX(int x) 
+        private float getCoordX(float x)
         {
             float ret = 0.0f;
             ret = (x * 1.0f) * (0.0033f) - 0.7f;
             return ret;
         }
 
-        private float getCoordY(int y)
+        private float getCoordY(float y)
         {
             float ret = 0.0f;
 
-            ret = (y * 1.0f) * (-0.0033f)+0.2f;
+            ret = (y * 1.0f) * (-0.0033f) + 0.2f;
 
             return ret;
         }
@@ -97,9 +99,9 @@ namespace GLOpenTKDemo
         {
             loadFile();
             loadCoordsFromSource();
-            UuNya[] lista = new UuNya[Math.Max(uu.count, nya.count)*2];
+            UuNya[] lista = new UuNya[Math.Max(uu.count, nya.count) * 2];
             int count = 0;
-            
+
             for (int i = 0; i < uu.count; i++)
             {
                 for (int k = 0; k < nya.count; k++)
@@ -138,10 +140,15 @@ namespace GLOpenTKDemo
             scene.getBackground().altColors();
 
             for (int i = 0; i < count; i++)
-                scene.addNewVBOCube(new VBOCube(getCoordX(lista[i].x), getCoordY(lista[i].y), getCoordX(lista[i].z)+1.5f, 0.0035f, 4));
+                scene.addNewVBOCube(new VBOCube(getCoordX(lista[i].x), getCoordY(lista[i].y), getCoordX(lista[i].z) + 1.5f, 0.0035f, 4, new UuNya(getCoordX(lista[i].x), getCoordY(lista[i].y), 2.0f), new UuNya(getCoordX(lista[i].z), getCoordY(lista[i].y), 2.0f) ,genRandCoords()));
 
 
             return scene;
+        }
+
+        public UuNya genRandCoords()
+        {
+            return new UuNya((((float)rand.NextDouble()) - 0.5f) * 2.0f, (((float)rand.NextDouble()) - 0.5f) * 2.0f, (((float)rand.NextDouble()) + 2.5f) * 2.0f);
         }
     }
 }
