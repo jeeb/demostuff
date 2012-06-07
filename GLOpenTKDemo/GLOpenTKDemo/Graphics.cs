@@ -90,8 +90,9 @@ namespace GLOpenTKDemo
             initializeScene(2);
 
             //JEEB!
-            scenes[3] = new Scene(0); //monta cubea sul on maksimissaan, ei kasva automaattisesti ku lisäät
-            scenes[3].setBackground(new VBOCube(0, 0, 0, 10.0f, 5, true)); //"5" on sinun shader program
+            scenes[3] = new Scene(10); //monta cubea sul on maksimissaan, ei kasva automaattisesti ku lisäät
+            scenes[3].setBackground(new VBOCube(0, 0, 0, ((float)Math.PI * 5), 5, true)); //"5" on sinun shader program
+            //scenes[3].addNewVBOCube(new VBOCube(0.7f, 0, 0.4f, ((float)Math.PI / 3), 2)); // Dunno, liikkuva boksi vai ei
             initializeScene(3);
 
 
