@@ -206,12 +206,12 @@ namespace GLOpenTKDemo
             /*if (tick > 60 * 4)
             {
                 graphics.Render(1);
-            }
-            else if (tick > 0)
+            }*/      
+            /*if (tick > 0)
             {
-                graphics.Render(0);
+                graphics.Render(2);
             }*/
-            graphics.Render(5);
+            graphics.Render(2);
             SwapBuffers();
             tick++;
 

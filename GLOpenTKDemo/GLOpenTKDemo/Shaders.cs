@@ -15,6 +15,8 @@ namespace GLOpenTKDemo
         private string ADVFRAGMENT = "Resources\\shaders\\adv.fragment";
         private string ADV2FRAGMENT = "Resources\\shaders\\adv2.fragment";
         private string ADVVertex = "Resources\\shaders\\adv.vertex";
+        private string TunnelVertex = "Resources\\shaders\\tunnel.vertex";
+        private string TunnelFragment = "Resources\\shaders\\tunnel.fragment";
         private string[] ShaderSources;
         private int[] ShaderIds;
         public int[] ProgramIds;
@@ -26,8 +28,9 @@ namespace GLOpenTKDemo
 
         public Shaders()
         {
-            shaderCount = 5;
-            programCount = 4;
+
+            shaderCount = 7;
+            programCount = 5;
             ShaderSources = new string[shaderCount];
             ShaderIds = new int[shaderCount];
             ProgramIds = new int[programCount];
@@ -117,7 +120,9 @@ namespace GLOpenTKDemo
             ShaderSources[2] = LoadShaders(ADVVertex);
             ShaderSources[3] = LoadShaders(ADVFRAGMENT);
             ShaderSources[4] = LoadShaders(ADV2FRAGMENT);
-            shaderCount = 5;
+            ShaderSources[5] = LoadShaders(TunnelVertex);
+            ShaderSources[6] = LoadShaders(TunnelFragment);
+            shaderCount = 7;
         }
 
         public void Initialize()
@@ -127,7 +132,7 @@ namespace GLOpenTKDemo
             CreateProgram(0, 4, 1, false);
             CreateProgram(2, 4, 2, false);
             CreateProgram(2, 1, 3, false);
-
+            CreateProgram(5, 6, 3, true);
         }
 
         public void Update()
@@ -139,6 +144,8 @@ namespace GLOpenTKDemo
             uudet[2] = LoadShaders(ADVVertex);
             uudet[3] = LoadShaders(ADVFRAGMENT);
             uudet[4] = LoadShaders(ADV2FRAGMENT);
+            uudet[5] = LoadShaders(TunnelVertex);
+            uudet[6] = LoadShaders(TunnelFragment);
             for (int i = 0; i < shaderCount; i++)
             {
                 if (uudet[i] != ShaderSources[i])
@@ -160,6 +167,7 @@ namespace GLOpenTKDemo
                 CreateProgram(0, 4, 1, true);
                 CreateProgram(2, 4, 2, true);
                 CreateProgram(2, 1, 3, true);
+                CreateProgram(5, 6, 3, true);
             }
             else
                 System.Console.WriteLine("Shaders: No change in shader sources!");
