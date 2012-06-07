@@ -83,7 +83,11 @@ namespace GLOpenTKDemo
             //scenes[1].addNewVBOCube(new VBOCube(0, 0.7f, 0, 0.5f, 1));
             //scenes[1].addNewVBOCube(new VBOCube(0, -0.7f, 0, 0.5f, 1));
             initializeScene(1);
-
+            scenes[2] = new Scene(10);
+            scenes[2].setBackground(new VBOCube(0, 0, 0, 10.0f, 3, true));
+            scenes[2].addNewVBOCube(new VBOCube(0.7f, 0, 0, 0.5f, 2));
+            scenes[2].addNewVBOCube(new VBOCube(-0.7f, 0, 0, 0.5f, 2));
+            initializeScene(2);
             //scenes[5].setBackground(new VBOCube(0, 0, 0, 20.0f, 2, true));
             //initializeScene(5);
 
