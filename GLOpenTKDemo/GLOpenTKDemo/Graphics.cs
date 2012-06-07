@@ -96,9 +96,27 @@ namespace GLOpenTKDemo
             initializeScene(3);
             scenes[4] = new Scene(10);
             scenes[4].setBackground(new VBOCube(0, 0, 0, 10.0f, 3, true));
-            scenes[4].addNewVBOCube(new VBOCube(0, 0, -2, 0.5f, 0));
+            scenes[4].addNewVBOCube(new VBOCube(2, 0, 0, 0.5f, 0));
 
             initializeScene(4);
+
+            scenes[7] = new Scene(10);
+            scenes[7].setBackground(new VBOCube(0, 0, 0, 10.0f, 3, true));
+            scenes[7].addNewVBOCube(new VBOCube(0.5f, 0, 0, 0.5f, 0));
+
+            initializeScene(7);
+
+            scenes[8] = new Scene(10);
+            scenes[8].setBackground(new VBOCube(0, 0, 0, 10.0f, 3, true));
+            scenes[8].addNewVBOCube(new VBOCube(-1.0f, -0.2f, -2.0f, 0.5f, 0));
+
+            initializeScene(8);
+
+            scenes[9] = new Scene(10);
+            scenes[9].setBackground(new VBOCube(0, 0, 0, 10.0f, 3, true));
+            scenes[9].addNewVBOCube(new VBOCube(1.0f, 0.3f, -1.0f, 0.5f, 0));
+
+            initializeScene(9);
             UuNyaaBuilder builder2 = new UuNyaaBuilder(4);
             scenes[5] = builder2.sceneBuilder();
             initializeScene(5);
@@ -308,7 +326,7 @@ namespace GLOpenTKDemo
         }
 
         public void moveCubes(float x, float y, float z, float speed) {
-            for (int i = 0; i < scenes[currentSceneId].getObjects().Length; i++)
+            for (int i = 0; i < scenes[currentSceneId].getCount(); i++)
             {
                 scenes[currentSceneId].getObjects()[i].moveTowards(x,y,z,speed);
             }

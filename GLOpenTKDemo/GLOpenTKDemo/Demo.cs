@@ -204,7 +204,7 @@ namespace GLOpenTKDemo
             graphics.rotateObjectByZ((float)fun * (0.001f + speed));*/
 
 
-            if (tick > 60 * 32)
+            if (tick > 60 * 36)
             {
                 Exit();
             }
@@ -212,38 +212,46 @@ namespace GLOpenTKDemo
             {
                 graphics.Render(3);
             }
-            else if (tick > 60 * 28)
+            else if (tick > 60 * 31)
             {
-                graphics.Render(4);
-                graphics.moveCubes(1, 1, 1, 0.5f);
+                graphics.Render(9);
+                graphics.moveCubes(-1, -1, 1, 0.15f);
+            }
+            else if (tick > 60 * 29)
+            {
+                graphics.Render(8);
+                graphics.moveCubes(1.0f, 0.3f, -1.0f, 0.15f);
+                graphics.rotateObjectByY(-0.11f);
+                graphics.rotateObjectByZ(0.01f);
+                graphics.rotateObjectByX(-0.1f);
             }
             else if (tick > 60 * 27)
             {
-                graphics.Render(4);
+                graphics.Render(8);
                 graphics.rotateObjectByY(-0.11f);
                 graphics.rotateObjectByZ(0.01f);
                 graphics.rotateObjectByX(-0.1f);
             }
             else if (tick > 60 * 25)
             {
-                graphics.Render(4);
+                graphics.Render(7);
+                graphics.moveCubes(-1.0f, -0.2f, -2, 0.1f);
                 graphics.rotateObjectByY(0.07f);
                 graphics.rotateObjectByZ(0.01f);
             }
             else if (tick > 60 * 23)
             {
+                graphics.Render(7);
+                graphics.rotateObjectByY(0.07f);
+                graphics.rotateObjectByZ(0.01f);
+            }
+            else if (tick > 60 * 21)
+            {
                 graphics.Render(4);
+                graphics.moveCubes(0.5f, 0, 0, 0.1f);
                 graphics.rotateObjectByY(-0.05f);
             }
-            else if (tick == 60 * 22 && !stupid)
-            {
-                graphics.addCube(0, 0, -2, 0.5f, 0);
-                stupid = true;
-            }
-            else if (tick == 60 * 21)
-            {
-                stupid = false;
-            }
+
             else if (tick == 60 * 20.4 && !stupid)
             {
                 graphics.destroyCube();
