@@ -124,7 +124,7 @@ namespace GLOpenTKDemo
         {
             LoadFromFile();
             CreateProgram(0, 1, 0, false);
-            CreateProgram(2, 3, 1, false);
+            CreateProgram(0, 3, 1, false);
             CreateProgram(2, 4, 2, false);
 
         }
@@ -132,7 +132,7 @@ namespace GLOpenTKDemo
         public void Update()
         {
             String[] uudet = new String[shaderCount];
-            bool changed = false;
+            bool changed = true;
             uudet[0] = LoadShaders(SIMPLEVERTEX);
             uudet[1] = LoadShaders(SIMPLEFRAGMENT);
             uudet[2] = LoadShaders(ADVVertex);
@@ -156,7 +156,7 @@ namespace GLOpenTKDemo
             {
                 System.Console.WriteLine("Shaders: Updated program!");
                 CreateProgram(0, 1, 0, true);
-                CreateProgram(2, 3, 1, true);
+                CreateProgram(0, 3, 1, true);
                 CreateProgram(2, 4, 2, true);
             }
             else

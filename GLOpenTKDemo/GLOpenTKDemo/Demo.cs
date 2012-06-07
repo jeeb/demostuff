@@ -211,7 +211,7 @@ namespace GLOpenTKDemo
             {
                 graphics.Render(0);
             }*/
-            graphics.Render(0);
+            graphics.Render(5);
             SwapBuffers();
             tick++;
 

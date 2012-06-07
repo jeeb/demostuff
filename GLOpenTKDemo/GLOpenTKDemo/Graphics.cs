@@ -84,8 +84,12 @@ namespace GLOpenTKDemo
             //scenes[1].addNewVBOCube(new VBOCube(0, -0.7f, 0, 0.5f, 1));
             initializeScene(1);
 
-            //scenes[5].setBackground(new VBOCube(0, 0, 0, 20.0f, 2, true));
+            //scenes[5] = new Scene(10000);
+            //scenes[5].setBackground(new VBOCube(0, 0, 0, 10.0f, 2, true));
             //initializeScene(5);
+            UuNyaaBuilder builder = new UuNyaaBuilder();
+            scenes[5] = builder.sceneBuilder();
+            initializeScene(5);
 
 
             ErrorCheckValue = GL.GetError();

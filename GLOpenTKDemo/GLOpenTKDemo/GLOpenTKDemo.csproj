@@ -45,6 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Nya.cs" />
+    <Compile Include="Uu.cs" />
+    <Compile Include="UuNya.cs" />
+    <Compile Include="UuNyaaBuilder.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Graphics.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

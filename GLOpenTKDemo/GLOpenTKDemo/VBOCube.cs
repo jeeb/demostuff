@@ -25,6 +25,7 @@ namespace GLOpenTKDemo
             1, 0, 1, 1,
             0, 0, 1, 1
           };
+
         uint[] indices;
 
         uint[] background = {
@@ -65,6 +66,19 @@ namespace GLOpenTKDemo
 
             ViewMatrix = Matrix4.Identity;
             ModelMatrix = Matrix4.CreateTranslation(new Vector3(x,y,z));
+        }
+        public void altColors()
+        {
+            Colors = new float[]{
+            1, 1, 1, 1 ,
+            1, 1, 1, 1,
+            1, 1, 1, 1,
+            1, 1, 1, 1 ,
+            1, 1, 1, 1,
+            1, 1, 1, 1,
+            1, 1, 1, 1,
+            1, 1, 1, 1
+          };
         }
         public VBOCube(float x, float y, float z, float scale, int ShaderProgramId)
         {
