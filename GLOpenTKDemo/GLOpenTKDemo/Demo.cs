@@ -208,21 +208,49 @@ namespace GLOpenTKDemo
             {
                 Exit();
             }
-            else if (tick > 60 * 26)
+            else if (tick > 60 * 30)
             {
                 graphics.Render(3);
+            }
+
+            else if (tick > 60 * 27)
+            {
+                graphics.Render(4);
+                graphics.rotateObjectByY(-0.11f);
+                graphics.rotateObjectByZ(0.01f);
+                graphics.rotateObjectByX(-0.1f);
+            }
+            else if (tick > 60 * 25)
+            {
+                graphics.Render(4);
+                graphics.rotateObjectByY(0.07f);
+                graphics.rotateObjectByZ(0.01f);
+            }
+            else if (tick > 60 * 23)
+            {
+                graphics.Render(4);
+                graphics.rotateObjectByY(-0.05f);
+            }
+            else if (tick == 60 * 22 && !stupid)
+            {
+                graphics.addCube(0, 0, -2, 0.5f, 0);
+                stupid = true;
+            }
+            else if (tick == 60 * 21)
+            {
+                stupid = false;
             }
             else if (tick == 60 * 20.4 && !stupid)
             {
                 graphics.destroyCube();
                 graphics.destroyCube();
                 stupid = true;
-            }  
+            }
             else if (tick > 60 * 16)
             {
                 graphics.Render(2);
             }
-            else if (tick > 60*4)
+            else if (tick > 60 * 4)
             {
                 graphics.Render(6);
                 graphics.animateUuNyaa();

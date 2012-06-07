@@ -94,7 +94,11 @@ namespace GLOpenTKDemo
             scenes[3].setBackground(new VBOCube(0, 0, 0, ((float)Math.PI * 5), 5, true)); //"5" on sinun shader program
             //scenes[3].addNewVBOCube(new VBOCube(0.7f, 0, 0.4f, ((float)Math.PI / 3), 2)); // Dunno, liikkuva boksi vai ei
             initializeScene(3);
+            scenes[4] = new Scene(10);
+            scenes[4].setBackground(new VBOCube(0, 0, 0, 10.0f, 3, true));
+            scenes[4].addNewVBOCube(new VBOCube(0, 0, -2, 0.5f, 0));
 
+            initializeScene(4);
             UuNyaaBuilder builder2 = new UuNyaaBuilder(4);
             scenes[5] = builder2.sceneBuilder();
             initializeScene(5);
@@ -166,7 +170,9 @@ namespace GLOpenTKDemo
 
         public void addCube(float x, float y, float z, float scale, int shaderProgramId)
         {
-            scenes[currentSceneId].addNewVBOCube(new VBOCube(x, y, z, scale, shaderProgramId));
+            VBOCube cube = new VBOCube(x, y, z, scale, shaderProgramId);
+            cube.loadToGpu();
+            scenes[currentSceneId].addNewVBOCube(cube);
         }
 
         public void rotateObjectByX(float x)
