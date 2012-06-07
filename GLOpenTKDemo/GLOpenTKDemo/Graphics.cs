@@ -267,26 +267,26 @@ namespace GLOpenTKDemo
         public void animateUuNyaa()
         {
             tick++;
-            if (tick > 60 * 8)
+            if (tick > 60 * 6)
             {
                 tick = 0;
             }
-            if (tick > 60 * 6)
-            {
-                createNya();
-            }
-            else if (tick > 60 * 4)
+            if (tick > 60 * 5)
             {
                 createRand();
             }
+            else if (tick > 60 * 3)
+            {
+                createNya();
+            }
             else if (tick > 60 * 2)
             {
-                createUu();
+                createRand();
                 //graphics.Render(2);
             }
             else if (tick > 0)
             {
-                createRand();
+                createUu();
                 //graphics.Render(5);
             }
         }
