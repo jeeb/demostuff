@@ -28,8 +28,8 @@ void main()
 	color += vec3(abs(sin(-t * 6.0 + v))) * tan(u*2.0) * 0.7;
 	
 	//color.y *= 1.2;
-	color.z *= 7.1;
+	color.z *= 2.1;
 	color *= rand(vec2(t, v)) * 1.0 + .0;
 	
-	out_Color = vec4(color, 2.1);
+	out_Color = vec4(color.x+(sin(time)*0.2),color.y*+(sin(time+0.2)*0.4),color.z*+(sin(time+0.7)*0.4), 2.1);
 }
