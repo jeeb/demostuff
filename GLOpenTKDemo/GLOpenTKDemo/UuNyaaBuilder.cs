@@ -89,7 +89,7 @@ namespace GLOpenTKDemo
         {
             float ret = 0.0f;
 
-            ret = (y * 1.0f) * (-0.0033f)+0.2f;
+            ret = (y * 1.0f) * (-0.0093f)+0.2f;
 
             return ret;
         }
