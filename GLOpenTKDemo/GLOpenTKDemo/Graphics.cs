@@ -240,5 +240,54 @@ namespace GLOpenTKDemo
             timeLocation = GL.GetUniformLocation(shader.ProgramIds[ID], "time");
             resoLocation = GL.GetUniformLocation(shader.ProgramIds[ID], "resolution");
         }
+
+        public void createUu() 
+        {
+            for (int i = 0; i < scenes[currentSceneId].getObjects().Length; i++)
+            {
+                scenes[currentSceneId].getObjects()[i].moveTowards(0,0.1f);
+            }
+        }
+        public void createNya()
+        {
+            for (int i = 0; i < scenes[currentSceneId].getObjects().Length; i++)
+            {
+                scenes[currentSceneId].getObjects()[i].moveTowards(1, 0.1f);
+            }
+        }
+        public void createRand()
+        {
+            for (int i = 0; i < scenes[currentSceneId].getObjects().Length; i++)
+            {
+                scenes[currentSceneId].getObjects()[i].moveTowards(2, 0.01f);
+            }
+        }
+        long tick = 0;
+        public void animateUuNyaa()
+        {
+            tick++;
+            if (tick > 60 * 8)
+            {
+                tick = 0;
+            }
+            if (tick > 60 * 6)
+            {
+                createNya();
+            }
+            else if (tick > 60 * 4)
+            {
+                createRand();
+            }
+            else if (tick > 60 * 2)
+            {
+                createUu();
+                //graphics.Render(2);
+            }
+            else if (tick > 0)
+            {
+                createRand();
+                //graphics.Render(5);
+            }
+        }
     }
 }

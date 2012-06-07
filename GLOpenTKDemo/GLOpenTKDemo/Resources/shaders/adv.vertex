@@ -13,9 +13,10 @@ void main(void)
 {
    //time2 = time;
    vec4 lol = (ProjectionMatrix * ViewMatrix * ModelMatrix) * in_Position;
-   if (sin(time) < 0.28)
-		gl_Position = vec4( (0.28-sin(time))*lol.x*0.6, lol.y, 0, 1);
-   else
-		gl_Position = vec4( (-(0.28-sin(time)))*(-lol.z)*1.2, lol.y, 0, 1);
+   //if (sin(time) < 0.28)
+	//	gl_Position = vec4( (0.28-sin(time))*lol.x*0.6, lol.y, 0, 1);
+   //else
+	//	gl_Position = vec4( (-(0.28-sin(time)))*(-lol.z)*1.2, lol.y, 0, 1);
+	gl_Position = vec4(lol.x, lol.y, 0, 1);
    ex_Color = in_Color;
 }
